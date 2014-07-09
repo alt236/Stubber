@@ -48,7 +48,7 @@ public class ClassWrapper implements Modifiers{
 	}
 
 	public String getName(){
-		return mClass.getName();
+		return mClass.getCanonicalName();
 	}
 
 	public String getPackageName(){
