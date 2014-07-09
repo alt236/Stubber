@@ -5,6 +5,7 @@ import java.util.List;
 
 import util.Constants;
 import util.FileIo;
+import util.ReflectionUtils.Exposure;
 import containers.ClassWrapper;
 
 public class ClassExporter {
@@ -40,7 +41,7 @@ public class ClassExporter {
 	}
 
 	private void writeToFile(ClassWrapper clazz) {
-		if(!clazz.isInnerClass()){
+		if(!clazz.isInnerClass() && clazz.getExposure() == Exposure.PUBLIC){
 			final File packagePath = new File(
 					mExportDirectory,
 					convertPackageToPath(clazz.getPackageName()));
@@ -55,8 +56,8 @@ public class ClassExporter {
 					getClassContent(
 							mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_CLASS_FILE),
 							clazz),
-					false,
-					true);
+							false,
+							true);
 		}
 	}
 
@@ -78,13 +79,15 @@ public class ClassExporter {
 				Constants.REP_TOKEN_METHODS,
 				ClassExporterUtils.getMethods(clazz));
 
-//		for(final ClassWrapper inner : clazz.getInnerClasses()){
-//			result += result.replace(
-//					Constants.REP_TOKEN_INNER_CLASSES,
-//					getClassContent(
-//							mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_INNER_CLASS),
-//							inner));
-//		}
+		for(final ClassWrapper inner : clazz.getInnerClasses()){
+			if(inner.getExposure() == Exposure.PUBLIC){
+				result += result.replace(
+						Constants.REP_TOKEN_INNER_CLASSES,
+						getClassContent(
+								mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_INNER_CLASS),
+								inner));
+			}
+		}
 
 
 		return result;

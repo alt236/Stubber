@@ -67,54 +67,68 @@ public class ClassExporterUtils {
 		sb.append('\n');
 
 		for(final FieldWrapper field : clazz.getFields()){
-			sb.append('\t');
+			if(field.getExposure() == Exposure.PUBLIC){
+				//We only care for static final values
+				if(field.isStaticFinal()){
+					sb.append('\t');
 
-			//We only care for static final values
-			if(field.isStaticFinal()){
-				final List<String> modifiers = getModifiers(field);
+					final List<String> modifiers = getModifiers(field);
 
-				for(final String mod : modifiers){
-					sb.append(mod);
-					sb.append(' ');
-				}
-
-				sb.append(field.getTypeAsString());
-				sb.append(' ');
-				sb.append(field.getName());
-
-				final Field f = field.getEncapsulatedMember();
-
-				final Class<?> t = f.getType();
-				try {
-					if(t == int.class){
-						sb.append(" = " + f.getInt(null));
-					}else if(t == double.class){
-						sb.append(" = " + f.getDouble(null));
-					} else if (t == boolean.class){
-						sb.append(" = " + f.getBoolean(null));
-					} else if (t == float.class){
-						sb.append(" = " + f.getFloat(null));
-					} else if (t == String.class){
-						sb.append(" = \"" + f.get(null).toString() + "\"");
-					} else if (t == short.class){
-						sb.append(" = " + f.getShort(null));
-					} else if (t == byte.class){
-						sb.append(" = " + f.getByte(null));
-					} else if (t == long.class){
-						sb.append(" = " + f.getLong(null));
-					} else if (t == char.class){
-						sb.append(" = " + f.getChar(null));
-					} else {
-						System.err.println("No idea what to set as value for '" + f + "' with value '" + f.get(null) + "'");
+					for(final String mod : modifiers){
+						sb.append(mod);
+						sb.append(' ');
 					}
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					throw new IllegalStateException(e);
+
+					sb.append(field.getTypeAsString());
+					sb.append(' ');
+					sb.append(field.getName());
+
+					final Field f = field.getEncapsulatedMember();
+
+					final Class<?> t = f.getType();
+
+					final boolean isAccessible = f.isAccessible();
+					if(!isAccessible){
+						f.setAccessible(true);
+					}
+					try {
+						if(t == int.class){
+							sb.append(" = " + f.getInt(null));
+						}else if(t == double.class){
+							sb.append(" = " + f.getDouble(null));
+						} else if (t == boolean.class){
+							sb.append(" = " + f.getBoolean(null));
+						} else if (t == float.class){
+							sb.append(" = " + f.getFloat(null));
+						} else if (t == String.class){
+							final String tmp = (String) f.get(null);
+
+							sb.append(" = " + (tmp == null? "null" : "\"" + f.get(null).toString() + "\""));
+						} else if (t == short.class){
+							sb.append(" = " + f.getShort(null));
+						} else if (t == byte.class){
+							sb.append(" = " + f.getByte(null));
+						} else if (t == long.class){
+							sb.append(" = " + f.getLong(null));
+						} else if (t == char.class){
+							sb.append(" = " + f.getChar(null));
+						} else {
+							sb.append(" = null");
+							System.err.println("No idea what to set as value for '" + f + "' with value '" + f.get(null) + "'");
+						}
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						throw new IllegalStateException(e);
+					}
+
+					if(!isAccessible){
+						f.setAccessible(false);
+					}
+
+					sb.append(';');
+					sb.append('\n');
 				}
 			}
 
-
-			sb.append(';');
-			sb.append('\n');
 		}
 
 		return sb.toString();
@@ -130,42 +144,44 @@ public class ClassExporterUtils {
 		sb.append('\n');
 
 		for(final MethodWrapper method : clazz.getMethods()){
-			final List<String> modifiers = getModifiers(method);
+			if(method.getExposure() == Exposure.PUBLIC){
+				final List<String> modifiers = getModifiers(method);
 
-			sb.append('\t');
-			for(final String mod : modifiers){
-				sb.append(mod);
-				sb.append(' ');
-			}
-
-			sb.append(method.getReturnType());
-			sb.append(' ');
-			sb.append(method.getName());
-
-			sb.append('(');
-
-			final Method f = method.getEncapsulatedMember();
-
-			if(f.getParameterTypes().length > 0){
-				for(int i = 0; i < f.getParameterTypes().length; i++){
-					if(i > 0){
-						sb.append(", ");
-					}
-					sb.append(f.getParameterTypes()[i].getName());
+				sb.append('\t');
+				for(final String mod : modifiers){
+					sb.append(mod);
 					sb.append(' ');
-					sb.append("param");
-					sb.append(i);
 				}
+
+				sb.append(method.getReturnType());
+				sb.append(' ');
+				sb.append(method.getName());
+
+				sb.append('(');
+
+				final Method f = method.getEncapsulatedMember();
+
+				if(f.getParameterTypes().length > 0){
+					for(int i = 0; i < f.getParameterTypes().length; i++){
+						if(i > 0){
+							sb.append(", ");
+						}
+						sb.append(f.getParameterTypes()[i].getName());
+						sb.append(' ');
+						sb.append("param");
+						sb.append(i);
+					}
+				}
+
+				//TODO: Add parameter declaration
+				sb.append(')');
+
+				sb.append('{');
+				sb.append('\n');
+				sb.append("\t}");
+				sb.append('\n');
+				sb.append('\n');
 			}
-
-			//TODO: Add parameter declaration
-			sb.append(')');
-
-			sb.append('{');
-			sb.append('\n');
-			sb.append("\t}");
-			sb.append('\n');
-			sb.append('\n');
 		}
 
 		return sb.toString();
