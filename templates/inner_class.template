@@ -1,9 +1,12 @@
 [CLASS_DEFINITION]{
 
-222222222222222
-
+	/* ############ FIELDS ############ */";
 [FIELDS]
+
+	/* ############ METHODS ############ */
 [METHODS]
+
+	/* ############ INNER CLASSES ############ */
 [INNER_CLASSES]
 
 };

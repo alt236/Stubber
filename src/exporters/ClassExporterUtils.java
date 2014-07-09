@@ -15,10 +15,6 @@ import containers.MethodWrapper;
 import containers.Modifiers;
 
 public class ClassExporterUtils {
-
-	private static final String FIELDS_BANNER = "\t/* ############ FIELDS ############ */";
-	private static final String METHODS_BANNER = "\t/* ############ METHODS ############ */";
-
 	public static String getClassDefinition(ClassWrapper clazz){
 		final ClassType type = clazz.getType();
 		final ClassWrapper superClass = clazz.getSuperClass();
@@ -63,9 +59,6 @@ public class ClassExporterUtils {
 
 	public static String getFieldDefinition(ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
-
-		sb.append(FIELDS_BANNER);
-		sb.append('\n');
 
 		for(final FieldWrapper field : clazz.getFields()){
 			if(field.getExposure() == Exposure.PUBLIC){
@@ -128,19 +121,13 @@ public class ClassExporterUtils {
 					sb.append('\n');
 				}
 			}
-
 		}
 
 		return sb.toString();
 	}
 
 	public static String getMethods(ClassWrapper clazz){
-
-
 		final StringBuilder sb = new StringBuilder();
-
-		sb.append(METHODS_BANNER);
-		sb.append('\n');
 
 		for(final MethodWrapper method : clazz.getMethods()){
 			if(method.getExposure() == Exposure.PUBLIC){
