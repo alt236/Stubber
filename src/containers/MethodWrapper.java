@@ -27,7 +27,7 @@ public class MethodWrapper implements Modifiers{
 	}
 
 	public String getReturnType() {
-		return mMember.getReturnType().getName();
+		return ReflectionUtils.getSaneType(mMember.getReturnType());
 	}
 
 	@Override

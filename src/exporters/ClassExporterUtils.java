@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import util.ReflectionUtils;
 import util.ReflectionUtils.ClassType;
 import util.ReflectionUtils.Exposure;
 import containers.ClassWrapper;
@@ -79,13 +80,12 @@ public class ClassExporterUtils {
 						sb.append(' ');
 					}
 
+					final Field f = field.getEncapsulatedMember();
+					final Class<?> t = f.getType();
+
 					sb.append(field.getTypeAsString());
 					sb.append(' ');
 					sb.append(field.getName());
-
-					final Field f = field.getEncapsulatedMember();
-
-					final Class<?> t = f.getType();
 
 					final boolean isAccessible = f.isAccessible();
 					if(!isAccessible){
@@ -134,7 +134,6 @@ public class ClassExporterUtils {
 		return sb.toString();
 	}
 
-
 	public static String getMethods(ClassWrapper clazz){
 
 
@@ -166,7 +165,7 @@ public class ClassExporterUtils {
 						if(i > 0){
 							sb.append(", ");
 						}
-						sb.append(f.getParameterTypes()[i].getName());
+						sb.append(ReflectionUtils.getSaneType(f.getParameterTypes()[i]));
 						sb.append(' ');
 						sb.append("param");
 						sb.append(i);

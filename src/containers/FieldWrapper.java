@@ -13,21 +13,21 @@ public class FieldWrapper implements Modifiers{
 		mMember = member;
 	}
 
+	public Field getEncapsulatedMember(){
+		return mMember;
+	}
+
 	@Override
 	public Exposure getExposure(){
 		return ReflectionUtils.getExposure(mMember);
-	}
-
-	public Field getEncapsulatedMember(){
-		return mMember;
 	}
 
 	public String getName(){
 		return mMember.getName();
 	}
 
-	public String getTypeAsString(){
-		return mMember.getType().getName();
+	public String getTypeAsString() {
+		return ReflectionUtils.getSaneType(mMember);
 	}
 
 	@Override
