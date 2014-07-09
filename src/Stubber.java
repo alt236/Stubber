@@ -9,23 +9,35 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Stubber {
-	final URLClassLoader mJarClassLoader;
-	final private String mTargetJarPath;
-	final private String mAdditionalClasspath;
+import util.ReflectionUtils;
+import containers.ClassWrapper;
+import exporters.ClassExporter;
 
+public class Stubber {
+	final private String mAdditionalClasspath;
+	final private URLClassLoader mJarClassLoader;
+	final private String mTargetJarPath;
+	final private String mTemplatePath;
+
+	public Stubber(String jarDirectory, String templateDir, String targetJar) {
+		mTemplatePath = templateDir;
+		mAdditionalClasspath = jarDirectory;
+		mTargetJarPath = jarDirectory + targetJar;
+
+		mJarClassLoader = new URLClassLoader(
+				getAllJarsInDirectory(mAdditionalClasspath),
+				this.getClass().getClassLoader());
+	}
 
 	private URL[] getAllJarsInDirectory(String path){
 		final File folder = new File(path);
 		final File[] listOfFiles = folder.listFiles();
-		final List<URL> listOfJars = new ArrayList<URL>();
+		final List<URL> listOfJars = new ArrayList<>();
 
-		for (File f : listOfFiles){
+		for (final File f : listOfFiles){
 			if (f.isFile()) {
 				if(f.getName().toLowerCase(Locale.US).endsWith("jar")){
 					System.out.println("File " + f.getName());
@@ -38,41 +50,23 @@ public class Stubber {
 		return listOfJars.toArray(new URL[0]);
 	}
 
-	@SuppressWarnings({ "deprecation" })
-	private URL getUrl(File f){
-		try {
-			return f.toURL();
-		} catch (MalformedURLException e) {
-			return null;
-		}
-	}
+	private Class<?> getClass(String className){
+		Class<?> c = null;
 
-	public Stubber(String additionalJars, String targetJar) {
-		mAdditionalClasspath = additionalJars;
-
-		mTargetJarPath = additionalJars + targetJar;
-
-		mJarClassLoader = new URLClassLoader(
-				getAllJarsInDirectory(mAdditionalClasspath),
-				this.getClass().getClassLoader());
-	}
-
-	private Method[] getClassMethods(String className) {
-		Class<?> c;
 		try {
 			c = Class.forName(className, false, mJarClassLoader);
-			return c.getDeclaredMethods();
+			System.out.println(c);
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: " + e.getMessage());
-			return new Method[0];
 		} catch (NoClassDefFoundError e){
 			System.err.println("ERROR: " + e.getMessage());
-			return new Method[0];
 		}
+
+		return c;
 	}
 
-	private Set<String> getClasses() {
-		final Set<String> classSet = new TreeSet<String>();
+	private List<Class<?>> getClasses() {
+		final List<Class<?>> classSet = new ArrayList<>();
 
 		try {
 			final ZipInputStream zip = new ZipInputStream(new FileInputStream(mTargetJarPath));
@@ -91,7 +85,7 @@ public class Stubber {
 							className.setLength(className.length() - ".class".length());
 						}
 					}
-					classSet.add(className.toString());
+					classSet.add(getClass(className.toString()));
 				}
 
 			zip.close();
@@ -104,15 +98,41 @@ public class Stubber {
 		return classSet;
 	}
 
+	@SuppressWarnings({ "deprecation" })
+	private URL getUrl(File f){
+		try {
+			return f.toURL();
+		} catch (MalformedURLException e) {
+			return null;
+		}
+	}
+
 	public void listJarContents() {
-		final Set<String> classSet = getClasses();
-		for(final String className : classSet){
-			System.out.println(className);
-			final Method[] methods = getClassMethods(className);
+		final List<Class<?>> classSet = getClasses();
+		for(final Class<?> clazz : classSet){
+			System.out.println(clazz);
+			final Method[] methods = clazz.getDeclaredMethods();
 
 			for(final Method method : methods){
 				System.out.println("\t" + method);
 			}
 		}
+	}
+
+	public void stubIt(){
+		final List<Class<?>> classArray = getClasses();
+		final List<ClassWrapper> myClassArray =
+				ReflectionUtils.getWrapper(classArray);
+
+		for(final Class<?> clazz : classArray){
+			System.out.println(clazz);
+			myClassArray.add(new ClassWrapper(clazz));
+		}
+
+		final ClassExporter exporter = new ClassExporter(
+				mAdditionalClasspath + "/export/",
+				mTemplatePath);
+
+		exporter.export(myClassArray);
 	}
 }
