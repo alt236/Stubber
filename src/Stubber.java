@@ -121,11 +121,9 @@ public class Stubber {
 
 	public void stubIt(){
 		final List<Class<?>> classArray = getClasses();
-		final List<ClassWrapper> myClassArray =
-				ReflectionUtils.getWrapper(classArray);
+		final List<ClassWrapper> myClassArray = ReflectionUtils.getWrapper(classArray);
 
 		for(final Class<?> clazz : classArray){
-			System.out.println(clazz);
 			myClassArray.add(new ClassWrapper(clazz));
 		}
 
@@ -134,5 +132,7 @@ public class Stubber {
 				mTemplatePath);
 
 		exporter.export(myClassArray);
+
+		System.out.println("  ----   DONE  -----");
 	}
 }

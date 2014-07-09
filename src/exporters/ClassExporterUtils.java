@@ -60,10 +60,12 @@ public class ClassExporterUtils {
 	public static String getFieldDefinition(ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
 
+		boolean wroteSomething = false;
 		for(final FieldWrapper field : clazz.getFields()){
 			if(field.getExposure() == Exposure.PUBLIC){
 				//We only care for static final values
 				if(field.isStaticFinal()){
+					wroteSomething = true;
 					sb.append('\t');
 
 					final List<String> modifiers = getModifiers(field);
@@ -123,15 +125,21 @@ public class ClassExporterUtils {
 			}
 		}
 
+		if(!wroteSomething){
+			sb.append("\t// NO VALID FIELDS!");
+		}
+
 		return sb.toString();
 	}
 
 	public static String getMethods(ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
 
+		boolean wroteSomething = false;
 		for(final MethodWrapper method : clazz.getMethods()){
 			if(method.getExposure() == Exposure.PUBLIC){
 				final List<String> modifiers = getModifiers(method);
+				wroteSomething = true;
 
 				sb.append('\t');
 				for(final String mod : modifiers){
@@ -170,6 +178,9 @@ public class ClassExporterUtils {
 			}
 		}
 
+		if(!wroteSomething){
+			sb.append("\t// NO VALID METHODS!");
+		}
 		return sb.toString();
 	}
 

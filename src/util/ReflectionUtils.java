@@ -73,14 +73,18 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static List<ClassWrapper> getWrapper(Class<?>[] array){
+	public static List<ClassWrapper> getWrapper(Class<?>[] array, boolean doInnerClasses){
 		final List<ClassWrapper> result = new ArrayList<>();
 
 		for(final Class<?> clazz : array){
-			result.add(new ClassWrapper(clazz));
+			result.add(new ClassWrapper(clazz, doInnerClasses));
 		}
 
 		return result;
+	}
+
+	public static List<ClassWrapper> getWrapper(Class<?>[] array){
+		return getWrapper(array, true);
 	}
 
 	public static List<FieldWrapper> getWrapper(Field[] array){

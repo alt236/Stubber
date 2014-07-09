@@ -1,9 +1,13 @@
 [PACKAGE]
 
 [CLASS_DEFINITION]{
-
+	/* ############ FIELDS ############ */";
 [FIELDS]
+
+	/* ############ METHODS ############ */
 [METHODS]
+
+	/* ############ INNER CLASSES ############ */
 [INNER_CLASSES]
 
 }

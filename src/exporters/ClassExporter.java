@@ -36,6 +36,7 @@ public class ClassExporter {
 	public void export(List<ClassWrapper> classes){
 		cleanup();
 		for(final ClassWrapper clazz : classes){
+			System.out.println(clazz.getName());
 			writeToFile(clazz);
 		}
 	}
@@ -79,14 +80,20 @@ public class ClassExporter {
 				Constants.REP_TOKEN_METHODS,
 				ClassExporterUtils.getMethods(clazz));
 
-		for(final ClassWrapper inner : clazz.getInnerClasses()){
-			if(inner.getExposure() == Exposure.PUBLIC){
-				result += result.replace(
-						Constants.REP_TOKEN_INNER_CLASSES,
-						getClassContent(
-								mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_INNER_CLASS),
-								inner));
+		if(clazz.getInnerClasses().size() > 0){
+			for(final ClassWrapper inner : clazz.getInnerClasses()){
+				if(inner.getExposure() == Exposure.PUBLIC){
+					result = result.replace(
+							Constants.REP_TOKEN_INNER_CLASSES,
+							getClassContent(
+									mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_INNER_CLASS),
+									inner));
+				}
 			}
+		} else {
+			result = result.replace(
+					Constants.REP_TOKEN_INNER_CLASSES,
+					"\t// NO INNER CLASSES!");
 		}
 
 

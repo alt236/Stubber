@@ -10,20 +10,29 @@ import util.ReflectionUtils.Exposure;
 
 public class ClassWrapper implements Modifiers{
 	private final Class<?> mClass;
-	private final  List<FieldWrapper> mFields;
-	private final  List<ClassWrapper> mInnerClasses;
-	private final  List<ClassWrapper> mInterfaces;
-	private final  List<MethodWrapper> mMethods;
+	private final List<FieldWrapper> mFields;
+	private final List<ClassWrapper> mInnerClasses;
+	private final List<ClassWrapper> mInterfaces;
+	private final List<MethodWrapper> mMethods;
 
 	private String mPackageName;
 
 	public ClassWrapper(Class<?> clazz){
+		this(clazz, true);
+	}
+
+	public ClassWrapper(Class<?> clazz, boolean getInnerClasses){
 		mClass = clazz;
 		mFields = ReflectionUtils.getWrapper(mClass.getFields());
-		mInnerClasses = new ArrayList<>();//.getWrapper(mClass.getDeclaredClasses());
-		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces());
 		mMethods = ReflectionUtils.getWrapper(mClass.getDeclaredMethods());
 		mPackageName = ReflectionUtils.getPackageName(clazz);
+		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces(), false);
+
+		if(getInnerClasses){
+			mInnerClasses = ReflectionUtils.getWrapper(mClass.getDeclaredClasses(), getInnerClasses);
+		} else {
+			mInnerClasses = new ArrayList<>();
+		}
 	}
 
 	@Override
