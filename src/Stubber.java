@@ -55,7 +55,6 @@ public class Stubber {
 
 		try {
 			c = Class.forName(className, false, mJarClassLoader);
-			System.out.println(c);
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: " + e.getMessage());
 		} catch (NoClassDefFoundError e){
@@ -110,7 +109,7 @@ public class Stubber {
 	public void listJarContents() {
 		final List<Class<?>> classSet = getClasses();
 		for(final Class<?> clazz : classSet){
-			System.out.println(clazz);
+			System.out.println("Class: " + clazz);
 			final Method[] methods = clazz.getDeclaredMethods();
 
 			for(final Method method : methods){

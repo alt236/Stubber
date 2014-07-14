@@ -34,7 +34,7 @@ public class ClassExporterUtils {
 
 		if(superClass != null){
 			sb.append(" extends ");
-			sb.append(superClass.getName());
+			sb.append(superClass.getCanonicalName());
 		}
 
 
@@ -49,7 +49,7 @@ public class ClassExporterUtils {
 					firstRun = true;
 				}
 
-				sb.append(iface.getName());
+				sb.append(iface.getCanonicalName());
 			}
 		}
 
@@ -87,30 +87,41 @@ public class ClassExporterUtils {
 						f.setAccessible(true);
 					}
 					try {
+						final String value;
+						boolean error = false;
+
 						if(t == int.class){
-							sb.append(" = " + f.getInt(null));
+							value = String.valueOf(f.getInt(null));
 						}else if(t == double.class){
-							sb.append(" = " + f.getDouble(null));
+							value = String.valueOf(f.getDouble(null));
 						} else if (t == boolean.class){
-							sb.append(" = " + f.getBoolean(null));
+							value = String.valueOf(f.getBoolean(null));
 						} else if (t == float.class){
-							sb.append(" = " + f.getFloat(null));
+							value = String.valueOf(f.getFloat(null));
 						} else if (t == String.class){
 							final String tmp = (String) f.get(null);
-
-							sb.append(" = " + (tmp == null? "null" : "\"" + f.get(null).toString() + "\""));
+							value = tmp == null? "null" : "\"" + f.get(null).toString() + "\"";
 						} else if (t == short.class){
-							sb.append(" = " + f.getShort(null));
+							value = String.valueOf(f.getShort(null));
 						} else if (t == byte.class){
-							sb.append(" = " + f.getByte(null));
+							value = String.valueOf(f.getByte(null));
 						} else if (t == long.class){
-							sb.append(" = " + f.getLong(null));
+							value = String.valueOf(f.getLong(null));
 						} else if (t == char.class){
-							sb.append(" = " + f.getChar(null));
+							value = String.valueOf(f.getChar(null));
 						} else {
-							sb.append(" = null");
-							System.err.println("No idea what to set as value for '" + f + "' with value '" + f.get(null) + "'");
+							value = "null";
+							error = true;
 						}
+
+						if(error){
+							System.err.println("\t\tField: No idea what to set as value for '" + f + "' with value '" + f.get(null) + "'");
+						} else {
+							System.out.println("\t\tField: '" + f + "'= '" + value + "'");
+						}
+
+						sb.append(" = ");
+						sb.append(value);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						throw new IllegalStateException(e);
 					}

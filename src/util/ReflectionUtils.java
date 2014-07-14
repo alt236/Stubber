@@ -22,18 +22,6 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static String getSaneType(Class<?> clazz){
-		if(clazz.isArray()){
-			return clazz.getCanonicalName();
-		} else {
-			return clazz.getCanonicalName();
-		}
-	}
-
-	public static String getSaneType(Field field){
-		return getSaneType(field.getType());
-	}
-
 	public static Exposure getExposure(Class<?> clazz){
 		return getExposure(clazz.getModifiers());
 	}
@@ -73,18 +61,26 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static List<ClassWrapper> getWrapper(Class<?>[] array, boolean doInnerClasses){
+	public static String getSaneType(Class<?> clazz){
+		if(clazz.isArray()){
+			return clazz.getCanonicalName();
+		} else {
+			return clazz.getCanonicalName();
+		}
+	}
+
+	public static String getSaneType(Field field){
+		return getSaneType(field.getType());
+	}
+
+	public static List<ClassWrapper> getWrapper(final Class<?>[] array){
 		final List<ClassWrapper> result = new ArrayList<>();
 
 		for(final Class<?> clazz : array){
-			result.add(new ClassWrapper(clazz, doInnerClasses));
+			result.add(new ClassWrapper(clazz));
 		}
 
 		return result;
-	}
-
-	public static List<ClassWrapper> getWrapper(Class<?>[] array){
-		return getWrapper(array, true);
 	}
 
 	public static List<FieldWrapper> getWrapper(Field[] array){

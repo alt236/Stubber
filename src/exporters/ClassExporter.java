@@ -35,17 +35,31 @@ public class ClassExporter {
 
 	public void export(List<ClassWrapper> classes){
 		cleanup();
+		long count = 0;
 		for(final ClassWrapper clazz : classes){
-			System.out.println(clazz.getName());
-			writeToFile(clazz);
+			if(writeToFile(clazz)){
+				count++;
+			}
 		}
+		System.out.println("Files Written: " + count);
 	}
 
-	private void writeToFile(ClassWrapper clazz) {
-		if(!clazz.isInnerClass() && clazz.getExposure() == Exposure.PUBLIC){
+	private boolean writeToFile(ClassWrapper clazz) {
+		final boolean isPublic = clazz.getExposure() == Exposure.PUBLIC;
+		if(!isPublic){return false;}
+
+		final boolean isInner = clazz.isInnerClass();
+		final boolean isAnon = clazz.isAnonymousClass();
+
+		System.out.println("About to export: Public: " + isPublic + ", Inner: " + isInner + ", Anon: " + isAnon + " -- '" + clazz.getCanonicalName() + "'");
+
+		if(!isInner && !isAnon && isPublic){
+			System.out.println("\tExporting: " + clazz.getCanonicalName());
+
 			final File packagePath = new File(
 					mExportDirectory,
 					convertPackageToPath(clazz.getPackageName()));
+
 			packagePath.mkdirs();
 
 			final File classFile = new File(
@@ -59,6 +73,9 @@ public class ClassExporter {
 							clazz),
 							false,
 							true);
+			return true;
+		} else {
+			return false;
 		}
 	}
 

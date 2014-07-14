@@ -1,6 +1,5 @@
 package containers;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 
 import util.ReflectionUtils;
@@ -18,21 +17,21 @@ public class ClassWrapper implements Modifiers{
 	private String mPackageName;
 
 	public ClassWrapper(Class<?> clazz){
-		this(clazz, true);
-	}
-
-	public ClassWrapper(Class<?> clazz, boolean getInnerClasses){
 		mClass = clazz;
 		mFields = ReflectionUtils.getWrapper(mClass.getFields());
 		mMethods = ReflectionUtils.getWrapper(mClass.getDeclaredMethods());
 		mPackageName = ReflectionUtils.getPackageName(clazz);
-		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces(), false);
+		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces());
 
-		if(getInnerClasses){
-			mInnerClasses = ReflectionUtils.getWrapper(mClass.getDeclaredClasses(), getInnerClasses);
-		} else {
-			mInnerClasses = new ArrayList<>();
-		}
+		//if(getInnerClasses){
+			mInnerClasses = ReflectionUtils.getWrapper(mClass.getDeclaredClasses());
+		//} else {
+		//	mInnerClasses = new ArrayList<>();
+		//}
+	}
+
+	public String getCanonicalName(){
+		return mClass.getCanonicalName();
 	}
 
 	@Override
@@ -44,6 +43,7 @@ public class ClassWrapper implements Modifiers{
 		return mFields;
 	}
 
+
 	public List<ClassWrapper> getInnerClasses(){
 		return mInnerClasses;
 	}
@@ -54,10 +54,6 @@ public class ClassWrapper implements Modifiers{
 
 	public List<MethodWrapper> getMethods(){
 		return mMethods;
-	}
-
-	public String getName(){
-		return mClass.getCanonicalName();
 	}
 
 	public String getPackageName(){
@@ -86,13 +82,21 @@ public class ClassWrapper implements Modifiers{
 		return Modifier.isAbstract(mClass.getModifiers());
 	}
 
+	public boolean isAnonymousClass(){
+		return mClass.isAnonymousClass();
+	}
+
 	@Override
 	public boolean isFinal(){
 		return Modifier.isFinal(mClass.getModifiers());
 	}
 
 	public boolean isInnerClass(){
-		return getName().contains("$");
+		if(isAnonymousClass()){
+			return true;
+		} else {
+			return getCanonicalName().contains("$");
+		}
 	}
 
 	@Override
