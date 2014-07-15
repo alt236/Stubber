@@ -13,20 +13,24 @@ public class MethodWrapper implements Modifiers{
 		mMember = member;
 	}
 
+	public Method getEncapsulatedMember(){
+		return mMember;
+	}
+
 	@Override
 	public Exposure getExposure(){
 		return ReflectionUtils.getExposure(mMember);
-	}
-
-	public Method getEncapsulatedMember(){
-		return mMember;
 	}
 
 	public String getName(){
 		return mMember.getName();
 	}
 
-	public String getReturnType() {
+	public Class<?> getReturnType() {
+		return mMember.getReturnType();
+	}
+
+	public String getReturnTypeAsString() {
 		return ReflectionUtils.getSaneType(mMember.getReturnType());
 	}
 
