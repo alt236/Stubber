@@ -90,6 +90,10 @@ public class ClassExporter {
 				ClassExporterUtils.getClassDefinition(clazz));
 
 		result = result.replace(
+				Constants.REP_TOKEN_CONSTRUCTORS,
+				ClassExporterUtils.getConstructors(clazz));
+
+		result = result.replace(
 				Constants.REP_TOKEN_FIELDS,
 				ClassExporterUtils.getFieldDefinition(clazz));
 

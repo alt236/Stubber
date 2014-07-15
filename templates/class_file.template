@@ -4,6 +4,9 @@
 	/* ############ FIELDS ############ */";
 [FIELDS]
 
+	/* ############ CONSTRUCTORS ############ */";
+[CONSTRUCTORS]
+
 	/* ############ METHODS ############ */
 [METHODS]
 

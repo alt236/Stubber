@@ -9,6 +9,7 @@ import util.ReflectionUtils.Exposure;
 
 public class ClassWrapper implements Modifiers{
 	private final Class<?> mClass;
+	private final List<ConstructorWrapper> mConstructors;
 	private final List<FieldWrapper> mFields;
 	private final List<ClassWrapper> mInnerClasses;
 	private final List<ClassWrapper> mInterfaces;
@@ -22,6 +23,7 @@ public class ClassWrapper implements Modifiers{
 		mMethods = ReflectionUtils.getWrapper(mClass.getDeclaredMethods());
 		mPackageName = ReflectionUtils.getPackageName(clazz);
 		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces());
+		mConstructors = ReflectionUtils.getWrapper(mClass.getDeclaredConstructors());
 
 		//if(getInnerClasses){
 			mInnerClasses = ReflectionUtils.getWrapper(mClass.getDeclaredClasses());
@@ -34,6 +36,10 @@ public class ClassWrapper implements Modifiers{
 		return mClass.getCanonicalName();
 	}
 
+	public List<ConstructorWrapper> getConstructors(){
+		return mConstructors;
+	}
+
 	@Override
 	public Exposure getExposure(){
 		return ReflectionUtils.getExposure(mClass);
@@ -42,7 +48,6 @@ public class ClassWrapper implements Modifiers{
 	public List<FieldWrapper> getFields() {
 		return mFields;
 	}
-
 
 	public List<ClassWrapper> getInnerClasses(){
 		return mInnerClasses;

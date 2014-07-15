@@ -1,5 +1,6 @@
 package exporters;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import util.ReflectionUtils;
 import util.ReflectionUtils.ClassType;
 import util.ReflectionUtils.Exposure;
 import containers.ClassWrapper;
+import containers.ConstructorWrapper;
 import containers.FieldWrapper;
 import containers.MethodWrapper;
 import containers.Modifiers;
@@ -56,6 +58,55 @@ public class ClassExporterUtils {
 		return sb.toString().trim();
 	}
 
+
+	public static CharSequence getConstructors(ClassWrapper clazz) {
+		final StringBuilder sb = new StringBuilder();
+
+		boolean wroteSomething = false;
+		for(final ConstructorWrapper method : clazz.getConstructors()){
+			if(method.getExposure() == Exposure.PUBLIC){
+				final List<String> modifiers = getModifiers(method);
+				wroteSomething = true;
+
+				sb.append('\t');
+				for(final String mod : modifiers){
+					sb.append(mod);
+					sb.append(' ');
+				}
+
+				sb.append(method.getName());
+
+				sb.append('(');
+
+				final Constructor<?> f = method.getEncapsulatedMember();
+
+				if(f.getParameterTypes().length > 0){
+					for(int i = 0; i < f.getParameterTypes().length; i++){
+						if(i > 0){
+							sb.append(", ");
+						}
+						sb.append(ReflectionUtils.getSaneType(f.getParameterTypes()[i]));
+						sb.append(' ');
+						sb.append("param");
+						sb.append(i);
+					}
+				}
+
+				sb.append(')');
+
+				sb.append('{');
+				sb.append('\n');
+				sb.append("\t}");
+				sb.append('\n');
+				sb.append('\n');
+			}
+		}
+
+		if(!wroteSomething){
+			sb.append("\t// NO VISIBLE CONSTRUCTORS!");
+		}
+		return sb.toString();
+	}
 
 	public static String getFieldDefinition(ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
@@ -146,19 +197,23 @@ public class ClassExporterUtils {
 		}
 
 		if(!wroteSomething){
-			sb.append("\t// NO VALID FIELDS!");
+			sb.append("\t// NO VISIBLE FIELDS!");
 		}
 
 		return sb.toString();
 	}
 
+
 	public static String getMethods(ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
+		final boolean isInterface = clazz.getType() == ClassType.INTERFACE;
 
 		boolean wroteSomething = false;
 		for(final MethodWrapper method : clazz.getMethods()){
 			if(method.getExposure() == Exposure.PUBLIC){
 				final List<String> modifiers = getModifiers(method);
+				final boolean isAbstract = method.isAbstract();
+
 				wroteSomething = true;
 
 				sb.append('\t');
@@ -187,19 +242,24 @@ public class ClassExporterUtils {
 					}
 				}
 
-				//TODO: Add parameter declaration
 				sb.append(')');
 
-				sb.append('{');
-				sb.append('\n');
-				sb.append("\t}");
-				sb.append('\n');
-				sb.append('\n');
+				if(isInterface || isAbstract){
+					sb.append(';');
+					sb.append('\n');
+					sb.append('\n');
+				} else {
+					sb.append('{');
+					sb.append('\n');
+					sb.append("\t}");
+					sb.append('\n');
+					sb.append('\n');
+				}
 			}
 		}
 
 		if(!wroteSomething){
-			sb.append("\t// NO VALID METHODS!");
+			sb.append("\t// NO VISIBLE METHODS!");
 		}
 		return sb.toString();
 	}

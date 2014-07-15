@@ -1,5 +1,6 @@
 package util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import containers.ClassWrapper;
+import containers.ConstructorWrapper;
 import containers.FieldWrapper;
 import containers.MethodWrapper;
 
@@ -83,6 +85,16 @@ public class ReflectionUtils {
 		return result;
 	}
 
+	public static List<ConstructorWrapper> getWrapper(Constructor<?>[] array){
+		final List<ConstructorWrapper> result = new ArrayList<>();
+
+		for(Constructor<?> method : array){
+			result.add(new ConstructorWrapper(method));
+		}
+
+		return result;
+	}
+
 	public static List<FieldWrapper> getWrapper(Field[] array){
 		final List<FieldWrapper> result = new ArrayList<>();
 
@@ -106,8 +118,6 @@ public class ReflectionUtils {
 
 		return result;
 	}
-
-
 
 	public enum ClassType{
 		CLASS,
