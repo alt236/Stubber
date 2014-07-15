@@ -76,7 +76,7 @@ public class ClassExporterUtils {
 					}
 
 					final Field f = field.getEncapsulatedMember();
-					final Class<?> t = f.getType();
+					final Class<?> fieldClass = f.getType();
 
 					sb.append(field.getTypeAsString());
 					sb.append(' ');
@@ -90,30 +90,39 @@ public class ClassExporterUtils {
 						final String value;
 						boolean error = false;
 
-						if(t == int.class){
-							value = String.valueOf(f.getInt(null));
-						}else if(t == double.class){
-							value = String.valueOf(f.getDouble(null));
-						} else if (t == boolean.class){
-							value = String.valueOf(f.getBoolean(null));
-						} else if (t == float.class){
-							value = String.valueOf(f.getFloat(null));
-						} else if (t == String.class){
-							final String tmp = (String) f.get(null);
-							value = tmp == null? "null" : "\"" + f.get(null).toString() + "\"";
-						} else if (t == short.class){
-							value = String.valueOf(f.getShort(null));
-						} else if (t == byte.class){
-							value = String.valueOf(f.getByte(null));
-						} else if (t == long.class){
-							value = String.valueOf(f.getLong(null));
-						} else if (t == char.class){
-							value = String.valueOf(f.getChar(null));
-						} else {
-							value = "null";
-							error = true;
-						}
+						if(fieldClass.isEnum()){
+							final Object tmp = f.get(null);
 
+							if(tmp == null){
+								value = "null";
+							} else {
+								value = fieldClass.getCanonicalName() + "." + String.valueOf(tmp);
+							}
+						} else {
+							if(fieldClass == int.class){
+								value = String.valueOf(f.getInt(null));
+							}else if(fieldClass == double.class){
+								value = String.valueOf(f.getDouble(null));
+							} else if (fieldClass == boolean.class){
+								value = String.valueOf(f.getBoolean(null));
+							} else if (fieldClass == float.class){
+								value = String.valueOf(f.getFloat(null));
+							} else if (fieldClass == String.class){
+								final String tmp = (String) f.get(null);
+								value = tmp == null? "null" : "\"" + f.get(null).toString() + "\"";
+							} else if (fieldClass == short.class){
+								value = String.valueOf(f.getShort(null));
+							} else if (fieldClass == byte.class){
+								value = String.valueOf(f.getByte(null));
+							} else if (fieldClass == long.class){
+								value = String.valueOf(f.getLong(null));
+							} else if (fieldClass == char.class){
+								value = String.valueOf(f.getChar(null));
+							} else {
+								value = "null";
+								error = true;
+							}
+						}
 						if(error){
 							System.err.println("\t\tField: No idea what to set as value for '" + f + "' with value '" + f.get(null) + "'");
 						} else {
