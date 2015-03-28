@@ -1,10 +1,10 @@
-package containers;
+package uk.co.alt236.stubber.containers;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import util.ReflectionUtils;
-import util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
 public class MethodWrapper implements Modifiers{
 	private final Method mMember;

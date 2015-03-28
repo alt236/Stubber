@@ -1,12 +1,12 @@
-package exporters;
+package uk.co.alt236.stubber.exporters;
 
 import java.io.File;
 import java.util.List;
 
-import util.Constants;
-import util.FileIo;
-import util.ReflectionUtils.Exposure;
-import containers.ClassWrapper;
+import uk.co.alt236.stubber.util.Constants;
+import uk.co.alt236.stubber.util.FileIo;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.containers.ClassWrapper;
 
 public class ClassExporter {
 	private final File mExportDirectory;

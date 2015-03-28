@@ -1,6 +1,6 @@
-package containers;
+package uk.co.alt236.stubber.containers;
 
-import util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
 
 public interface Modifiers {

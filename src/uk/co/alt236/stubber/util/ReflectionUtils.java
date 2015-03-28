@@ -1,4 +1,4 @@
-package util;
+package uk.co.alt236.stubber.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -8,10 +8,10 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import containers.ClassWrapper;
-import containers.ConstructorWrapper;
-import containers.FieldWrapper;
-import containers.MethodWrapper;
+import uk.co.alt236.stubber.containers.ClassWrapper;
+import uk.co.alt236.stubber.containers.ConstructorWrapper;
+import uk.co.alt236.stubber.containers.FieldWrapper;
+import uk.co.alt236.stubber.containers.MethodWrapper;
 
 public class ReflectionUtils {
 	private static final String PACKAGE_SEPARATOR = ".";

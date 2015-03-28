@@ -1,10 +1,10 @@
-package containers;
+package uk.co.alt236.stubber.containers;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import util.ReflectionUtils;
-import util.ReflectionUtils.ClassType;
-import util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
 
 public class ClassWrapper implements Modifiers{

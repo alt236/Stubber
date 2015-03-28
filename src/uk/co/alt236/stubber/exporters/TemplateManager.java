@@ -1,4 +1,4 @@
-package exporters;
+package uk.co.alt236.stubber.exporters;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import util.Constants;
-import util.FileIo;
+import uk.co.alt236.stubber.util.Constants;
+import uk.co.alt236.stubber.util.FileIo;
 
 public class TemplateManager {
 	private final Map<String, String> mTemplateMap = new HashMap<>();

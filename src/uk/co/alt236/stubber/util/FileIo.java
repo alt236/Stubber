@@ -1,4 +1,4 @@
-package util;
+package uk.co.alt236.stubber.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

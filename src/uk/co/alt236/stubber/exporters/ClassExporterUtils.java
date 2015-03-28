@@ -1,4 +1,4 @@
-package exporters;
+package uk.co.alt236.stubber.exporters;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import util.ReflectionUtils;
-import util.ReflectionUtils.ClassType;
-import util.ReflectionUtils.Exposure;
-import containers.ClassWrapper;
-import containers.ConstructorWrapper;
-import containers.FieldWrapper;
-import containers.MethodWrapper;
-import containers.Modifiers;
+import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.containers.ClassWrapper;
+import uk.co.alt236.stubber.containers.ConstructorWrapper;
+import uk.co.alt236.stubber.containers.FieldWrapper;
+import uk.co.alt236.stubber.containers.MethodWrapper;
+import uk.co.alt236.stubber.containers.Modifiers;
 
 public class ClassExporterUtils {
 	public static String getClassDefinition(ClassWrapper clazz){

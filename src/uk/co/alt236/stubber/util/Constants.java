@@ -1,4 +1,4 @@
-package util;
+package uk.co.alt236.stubber.util;
 
 public class Constants {
 	public final static String TEMPLATE_NAME_CLASS_FILE = "class_file.template";
