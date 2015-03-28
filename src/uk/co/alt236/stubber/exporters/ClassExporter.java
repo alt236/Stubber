@@ -3,18 +3,18 @@ package uk.co.alt236.stubber.exporters;
 import java.io.File;
 import java.util.List;
 
-import uk.co.alt236.stubber.util.Constants;
+import uk.co.alt236.stubber.template.ClassTemplate;
 import uk.co.alt236.stubber.util.FileIo;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 import uk.co.alt236.stubber.containers.ClassWrapper;
 
 public class ClassExporter {
 	private final File mExportDirectory;
-	private final TemplateManager mTemplateManager;
+	private final ClassTemplate classTemplate;
 
 	public ClassExporter (final String exportDir, final String templateDirectory){
 		mExportDirectory = new File(exportDir);
-		mTemplateManager = new TemplateManager(templateDirectory);
+		classTemplate = new ClassTemplate(templateDirectory);
 	}
 
 	private void cleanup(){
@@ -66,62 +66,18 @@ public class ClassExporter {
 					packagePath,
 					clazz.getSimplename() + ".java");
 
+
+			final String classContent = classTemplate.build(clazz);
 			FileIo.writeToFile(
 					classFile,
-					getClassContent(
-							mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_CLASS_FILE),
-							clazz),
-							false,
-							true);
+					classContent,
+					false,
+					true);
 			return true;
 		} else {
 			return false;
 		}
 	}
-
-
-	private String getClassContent(final String template, final ClassWrapper clazz){
-		String result = template.replace(
-				Constants.REP_TOKEN_PACKAGE,
-				clazz.getPackageName() + ";");
-
-		result = result.replace(
-				Constants.REP_TOKEN_CLASS_DEFINITION,
-				ClassExporterUtils.getClassDefinition(clazz));
-
-		result = result.replace(
-				Constants.REP_TOKEN_CONSTRUCTORS,
-				ClassExporterUtils.getConstructors(clazz));
-
-		result = result.replace(
-				Constants.REP_TOKEN_FIELDS,
-				ClassExporterUtils.getFieldDefinition(clazz));
-
-		result = result.replace(
-				Constants.REP_TOKEN_METHODS,
-				ClassExporterUtils.getMethods(clazz));
-
-		if(clazz.getInnerClasses().size() > 0){
-			for(final ClassWrapper inner : clazz.getInnerClasses()){
-				if(inner.getExposure() == Exposure.PUBLIC){
-					result = result.replace(
-							Constants.REP_TOKEN_INNER_CLASSES,
-							getClassContent(
-									mTemplateManager.getTemplate(Constants.TEMPLATE_NAME_INNER_CLASS),
-									inner));
-				}
-			}
-		} else {
-			result = result.replace(
-					Constants.REP_TOKEN_INNER_CLASSES,
-					"\t// NO INNER CLASSES!");
-		}
-
-
-		return result;
-	}
-
-
 
 	private static String convertPackageToPath(final String packageName){
 		return packageName.replace('.', File.separatorChar) + File.separatorChar;

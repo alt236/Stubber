@@ -1,8 +1,6 @@
-package uk.co.alt236.stubber.util;
+package uk.co.alt236.stubber.template;
 
-public class Constants {
-	public static final String TEMPLATE_NAME_CLASS_FILE = "class_file.template";
-	public static final String TEMPLATE_NAME_INNER_CLASS = "inner_class.template";
+public class TemplateConstants {
 
 	public static final String REP_TOKEN_CLASS_DEFINITION = "[CLASS_DEFINITION]";
 	public static final String REP_TOKEN_CONSTRUCTORS = "[CONSTRUCTORS]";

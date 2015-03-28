@@ -92,7 +92,7 @@ public class ClassExporterUtils {
 		return methodResult;
 	}
 
-	public static CharSequence getConstructors(final ClassWrapper clazz) {
+	public static String getConstructors(final ClassWrapper clazz) {
 		final StringBuilder sb = new StringBuilder();
 
 		boolean wroteSomething = false;

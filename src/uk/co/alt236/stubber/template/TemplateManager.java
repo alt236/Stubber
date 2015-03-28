@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters;
+package uk.co.alt236.stubber.template;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,16 +6,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import uk.co.alt236.stubber.util.Constants;
 import uk.co.alt236.stubber.util.FileIo;
 
-public class TemplateManager {
+class TemplateManager {
+	public static final String TEMPLATE_NAME_CLASS_FILE = "class_file.template";
+	public static final String TEMPLATE_NAME_INNER_CLASS = "inner_class.template";
+
 	private final Map<String, String> mTemplateMap = new HashMap<>();
 
 	public TemplateManager(final String basePath){
 		final Set<String> templateNames = new TreeSet<>();
-		templateNames.add(Constants.TEMPLATE_NAME_CLASS_FILE);
-		templateNames.add(Constants.TEMPLATE_NAME_INNER_CLASS);
+		templateNames.add(TEMPLATE_NAME_CLASS_FILE);
+		templateNames.add(TEMPLATE_NAME_INNER_CLASS);
 
 		for(final String templateName : templateNames){
 			try {
