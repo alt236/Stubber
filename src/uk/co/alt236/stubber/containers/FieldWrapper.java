@@ -9,7 +9,7 @@ import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 public class FieldWrapper implements Modifiers{
 	private final Field mMember;
 
-	public FieldWrapper(Field member) {
+	public FieldWrapper(final Field member) {
 		mMember = member;
 	}
 

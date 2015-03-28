@@ -15,9 +15,9 @@ public class ClassWrapper implements Modifiers{
 	private final List<ClassWrapper> mInterfaces;
 	private final List<MethodWrapper> mMethods;
 
-	private String mPackageName;
+	private final String mPackageName;
 
-	public ClassWrapper(Class<?> clazz){
+	public ClassWrapper(final Class<?> clazz){
 		mClass = clazz;
 		mFields = ReflectionUtils.getWrapper(mClass.getFields());
 		mMethods = ReflectionUtils.getWrapper(mClass.getDeclaredMethods());

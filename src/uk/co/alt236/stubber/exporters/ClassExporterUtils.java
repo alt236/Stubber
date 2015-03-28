@@ -17,7 +17,7 @@ import uk.co.alt236.stubber.containers.MethodWrapper;
 import uk.co.alt236.stubber.containers.Modifiers;
 
 public class ClassExporterUtils {
-	public static String getClassDefinition(ClassWrapper clazz){
+	public static String getClassDefinition(final ClassWrapper clazz){
 		final ClassType type = clazz.getType();
 		final ClassWrapper superClass = clazz.getSuperClass();
 		final List<ClassWrapper> interfaces = clazz.getInterfaces();
@@ -44,7 +44,7 @@ public class ClassExporterUtils {
 			sb.append(" implements ");
 			boolean firstRun = true;
 
-			for(ClassWrapper iface : interfaces){
+			for(final ClassWrapper iface : interfaces){
 				if(!firstRun){
 					sb.append(", ");
 				} else {
@@ -92,7 +92,7 @@ public class ClassExporterUtils {
 		return methodResult;
 	}
 
-	public static CharSequence getConstructors(ClassWrapper clazz) {
+	public static CharSequence getConstructors(final ClassWrapper clazz) {
 		final StringBuilder sb = new StringBuilder();
 
 		boolean wroteSomething = false;
@@ -140,7 +140,7 @@ public class ClassExporterUtils {
 		return sb.toString();
 	}
 
-	public static String getFieldDefinition(ClassWrapper clazz){
+	public static String getFieldDefinition(final ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
 
 		boolean wroteSomething = false;
@@ -236,7 +236,7 @@ public class ClassExporterUtils {
 	}
 
 
-	public static String getMethods(ClassWrapper clazz){
+	public static String getMethods(final ClassWrapper clazz){
 		final StringBuilder sb = new StringBuilder();
 		final boolean isInterface = clazz.getType() == ClassType.INTERFACE;
 
@@ -306,7 +306,7 @@ public class ClassExporterUtils {
 	}
 
 
-	private static List<String> getModifiers(Modifiers mod){
+	private static List<String> getModifiers(final Modifiers mod){
 		final List<String> modifiers = new ArrayList<>();
 
 		if(mod.getExposure() != Exposure.DEFAULT){

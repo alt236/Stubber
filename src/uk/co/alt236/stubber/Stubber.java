@@ -18,13 +18,13 @@ import uk.co.alt236.stubber.util.validators.FileValidator;
 
 public class Stubber {
 
-	final private URLClassLoader mJarClassLoader;
-	final private String mAdditionalClasspath;
-	final private String mTargetJarPath;
-	final private String mTemplatePath;
-	final private String outputDir;
+	private final URLClassLoader mJarClassLoader;
+	private final String mAdditionalClasspath;
+	private final String mTargetJarPath;
+	private final String mTemplatePath;
+	private final String outputDir;
 
-	private Stubber(Builder builder) {
+	private Stubber(final Builder builder) {
 		mTemplatePath = builder.templateDir;
 		mAdditionalClasspath = builder.dependenciesDir;
 		mTargetJarPath =  builder.targetJar;
@@ -50,15 +50,15 @@ public class Stubber {
 		}
 	}
 
-	private Class<?> getClass(String className){
+	private Class<?> getClass(final String className){
 		Class<?> c = null;
 
 		try {
 			c = Class.forName(className, false, mJarClassLoader);
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			System.err.println("ERROR: " + e.getMessage());
 			e.printStackTrace();
-		} catch (NoClassDefFoundError e){
+		} catch (final NoClassDefFoundError e){
 			System.err.println("ERROR: " + e.getMessage());
 			e.printStackTrace();
 		}
@@ -90,9 +90,9 @@ public class Stubber {
 				}
 
 			zip.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
@@ -136,22 +136,22 @@ public class Stubber {
         private String templateDir;
         private String targetJar;
 
-        public Builder setDependencyDirectory(String directory) {
+        public Builder setDependencyDirectory(final String directory) {
             this.dependenciesDir = directory;
             return this;
         }
 
-		public Builder setOutputDir(String directory) {
+		public Builder setOutputDir(final String directory) {
 			this.outputDir = directory;
 			return this;
 		}
 
-        public Builder setOutputTemplateDir(String directory) {
+        public Builder setOutputTemplateDir(final String directory) {
             this.templateDir = directory;
             return this;
         }
 
-        public Builder setTargetJar(String jar) {
+        public Builder setTargetJar(final String jar) {
             this.targetJar = jar;
             return this;
         }

@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter;
 
 public class FileIo {
 
-	public static void delete(File f) throws IOException {
+	public static void delete(final File f) throws IOException {
 		if (f.isDirectory()) {
 			for (final File c : f.listFiles()){
 				delete(c);
@@ -22,14 +22,14 @@ public class FileIo {
 		}
 	}
 
-	public static String readFileAsString(String filePath) throws java.io.IOException{
-		final StringBuffer fileData = new StringBuffer(1000);
+	public static String readFileAsString(final String filePath) throws java.io.IOException{
+		final StringBuilder fileData = new StringBuilder(1000);
 		final BufferedReader reader = new BufferedReader(new FileReader(filePath));
 		char[] buf = new char[1024];
 
 		int numRead=0;
 		while((numRead=reader.read(buf)) != -1){
-			String readData = String.valueOf(buf, 0, numRead);
+			final String readData = String.valueOf(buf, 0, numRead);
 			fileData.append(readData);
 			buf = new char[1024];
 		}
@@ -40,20 +40,21 @@ public class FileIo {
 	/**
 	 * Write to file.
 	 *
-	 * @param The target file
+	 * @param file The target file
 	 * @param text the text to write to the file.
 	 * @param append the append
 	 * @param newline whether to append a newline at the end to the string.
 	 */
-	public static void writeToFile(File file, String text, Boolean append, Boolean newline){
+	public static void writeToFile(final File file, final String text, final boolean append, final boolean newline){
 		try{
 			final OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8");
 			final BufferedWriter bw = new BufferedWriter(osw);
 			bw.write(text);
-			if (newline)
+			if (newline) {
 				bw.newLine();
+			}
 			bw.close();
-		}catch (Exception e) {
+		}catch (final Exception e) {
 			System.err.println("ERROR: Error when writing to '"+ file +"': " + e.getMessage());
 			e.printStackTrace();
 		}

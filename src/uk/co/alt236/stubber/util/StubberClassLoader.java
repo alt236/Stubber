@@ -17,10 +17,10 @@ public class StubberClassLoader extends URLClassLoader{
         super(getAllJars(jarPaths), classLoader);
     }
 
-    private static URL[] getAllJars(String... paths){
+    private static URL[] getAllJars(final String... paths){
         final List<URL> listOfJars = new ArrayList<>();
 
-        for(String path : paths) {
+        for(final String path : paths) {
             if(path != null) {
                 final File f = new File(path);
                 if (f.isDirectory()) {
@@ -51,10 +51,10 @@ public class StubberClassLoader extends URLClassLoader{
     }
 
     @SuppressWarnings({ "deprecation" })
-    private static URL getUrl(File f){
+    private static URL getUrl(final File f){
         try {
             return f.toURL();
-        } catch (MalformedURLException e) {
+        } catch (final MalformedURLException e) {
             return null;
         }
     }

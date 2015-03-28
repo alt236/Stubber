@@ -16,7 +16,7 @@ import uk.co.alt236.stubber.containers.MethodWrapper;
 public class ReflectionUtils {
 	private static final String PACKAGE_SEPARATOR = ".";
 
-	public static ClassType getClassType(Class<?> clazz){
+	public static ClassType getClassType(final Class<?> clazz){
 		if(Modifier.isInterface(clazz.getModifiers())){
 			return ClassType.INTERFACE;
 		} else {
@@ -24,11 +24,11 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static Exposure getExposure(Class<?> clazz){
+	public static Exposure getExposure(final Class<?> clazz){
 		return getExposure(clazz.getModifiers());
 	}
 
-	private static Exposure getExposure(int modifiers){
+	private static Exposure getExposure(final int modifiers){
 		if(Modifier.isPrivate(modifiers)){
 			return Exposure.PRIVATE;
 		} else if(Modifier.isPublic(modifiers)){
@@ -40,7 +40,7 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static Exposure getExposure(Member member){
+	public static Exposure getExposure(final Member member){
 		return getExposure(member.getModifiers());
 	}
 
@@ -63,7 +63,7 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static String getSaneType(Class<?> clazz){
+	public static String getSaneType(final Class<?> clazz){
 		if(clazz.isArray()){
 			return clazz.getCanonicalName();
 		} else {
@@ -71,7 +71,7 @@ public class ReflectionUtils {
 		}
 	}
 
-	public static String getSaneType(Field field){
+	public static String getSaneType(final Field field){
 		return getSaneType(field.getType());
 	}
 
@@ -85,34 +85,34 @@ public class ReflectionUtils {
 		return result;
 	}
 
-	public static List<ConstructorWrapper> getWrapper(Constructor<?>[] array){
+	public static List<ConstructorWrapper> getWrapper(final Constructor<?>[] array){
 		final List<ConstructorWrapper> result = new ArrayList<>();
 
-		for(Constructor<?> method : array){
+		for(final Constructor<?> method : array){
 			result.add(new ConstructorWrapper(method));
 		}
 
 		return result;
 	}
 
-	public static List<FieldWrapper> getWrapper(Field[] array){
+	public static List<FieldWrapper> getWrapper(final Field[] array){
 		final List<FieldWrapper> result = new ArrayList<>();
 
-		for(Field member : array){
+		for(final Field member : array){
 			result.add(new FieldWrapper(member));
 		}
 
 		return result;
 	}
 
-	public static List<ClassWrapper> getWrapper(List<Class<?>> list){
+	public static List<ClassWrapper> getWrapper(final List<Class<?>> list){
 		return getWrapper(list.toArray(new Class<?>[0]));
 	}
 
-	public static List<MethodWrapper> getWrapper(Method[] array){
+	public static List<MethodWrapper> getWrapper(final Method[] array){
 		final List<MethodWrapper> result = new ArrayList<>();
 
-		for(Method method : array){
+		for(final Method method : array){
 			result.add(new MethodWrapper(method));
 		}
 

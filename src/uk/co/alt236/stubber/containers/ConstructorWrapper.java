@@ -9,7 +9,7 @@ import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 public class ConstructorWrapper implements Modifiers{
 	private final Constructor<?> mMember;
 
-	public ConstructorWrapper(Constructor<?> member) {
+	public ConstructorWrapper(final Constructor<?> member) {
 		mMember = member;
 	}
 

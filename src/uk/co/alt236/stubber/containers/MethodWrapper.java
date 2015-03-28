@@ -9,7 +9,7 @@ import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 public class MethodWrapper implements Modifiers{
 	private final Method mMember;
 
-	public MethodWrapper(Method member) {
+	public MethodWrapper(final Method member) {
 		mMember = member;
 	}
 

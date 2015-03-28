@@ -12,7 +12,7 @@ import uk.co.alt236.stubber.util.FileIo;
 public class TemplateManager {
 	private final Map<String, String> mTemplateMap = new HashMap<>();
 
-	public TemplateManager(String basePath){
+	public TemplateManager(final String basePath){
 		final Set<String> templateNames = new TreeSet<>();
 		templateNames.add(Constants.TEMPLATE_NAME_CLASS_FILE);
 		templateNames.add(Constants.TEMPLATE_NAME_INNER_CLASS);
@@ -21,13 +21,13 @@ public class TemplateManager {
 			try {
 				final String template = FileIo.readFileAsString(basePath + templateName);
 				mTemplateMap.put(templateName, template);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				throw new IllegalStateException(e);
 			}
 		}
 	}
 
-	public String getTemplate(String key){
+	public String getTemplate(final String key){
 		return mTemplateMap.get(key);
 	}
 }

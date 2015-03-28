@@ -12,7 +12,7 @@ public class ClassExporter {
 	private final File mExportDirectory;
 	private final TemplateManager mTemplateManager;
 
-	public ClassExporter (String exportDir, String templateDirectory){
+	public ClassExporter (final String exportDir, final String templateDirectory){
 		mExportDirectory = new File(exportDir);
 		mTemplateManager = new TemplateManager(templateDirectory);
 	}
@@ -21,7 +21,7 @@ public class ClassExporter {
 		if(mExportDirectory.exists()){
 			try{
 				FileIo.delete(mExportDirectory);
-			} catch (Exception e){
+			} catch (final Exception e){
 				System.out.println(e.getMessage());
 			}
 		}
@@ -33,7 +33,7 @@ public class ClassExporter {
 		}
 	}
 
-	public void export(List<ClassWrapper> classes){
+	public void export(final List<ClassWrapper> classes){
 		cleanup();
 		long count = 0;
 		for(final ClassWrapper clazz : classes){
@@ -44,7 +44,7 @@ public class ClassExporter {
 		System.out.println("Files Written: " + count);
 	}
 
-	private boolean writeToFile(ClassWrapper clazz) {
+	private boolean writeToFile(final ClassWrapper clazz) {
 		final boolean isPublic = clazz.getExposure() == Exposure.PUBLIC;
 		if(!isPublic){return false;}
 
@@ -80,7 +80,7 @@ public class ClassExporter {
 	}
 
 
-	private String getClassContent(String template, ClassWrapper clazz){
+	private String getClassContent(final String template, final ClassWrapper clazz){
 		String result = template.replace(
 				Constants.REP_TOKEN_PACKAGE,
 				clazz.getPackageName() + ";");
@@ -123,7 +123,7 @@ public class ClassExporter {
 
 
 
-	private static String convertPackageToPath(String packageName){
+	private static String convertPackageToPath(final String packageName){
 		return packageName.replace('.', File.separatorChar) + File.separatorChar;
 	}
 
