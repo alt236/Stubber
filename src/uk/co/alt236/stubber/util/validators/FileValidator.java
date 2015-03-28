@@ -8,18 +8,32 @@ import java.io.File;
 public class FileValidator {
     private final String path;
     private final boolean optional;
+    private final String description;
 
-    public FileValidator(final String path, final boolean optional){
+    public FileValidator(final String description, final String path){
+        this(description, path, false);
+    }
+
+    public FileValidator(final String description, final String path, final boolean optional){
         this.path = path;
+        this.description = description;
         this.optional = optional;
     }
 
     public void validate(){
+        if(path == null){
+            if(optional){
+                return;
+            } else {
+                throw new IllegalArgumentException(description + " -- Path cannot be null!");
+            }
+        }
+
         final File file = new File(path);
 
         if(!optional){
             if(!file.exists()){
-                throw new IllegalArgumentException("File '" + path + "' does not exist");
+                throw new IllegalArgumentException(description + " -- File '" + path + "' does not exist");
             }
         }
     }

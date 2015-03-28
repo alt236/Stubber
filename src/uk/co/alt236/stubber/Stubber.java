@@ -1,53 +1,53 @@
-import java.io.File;
+package uk.co.alt236.stubber;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import util.ReflectionUtils;
-import containers.ClassWrapper;
-import exporters.ClassExporter;
+import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.containers.ClassWrapper;
+import uk.co.alt236.stubber.exporters.ClassExporter;
+import uk.co.alt236.stubber.util.StubberClassLoader;
+import uk.co.alt236.stubber.util.validators.FileValidator;
 
 public class Stubber {
-	final private String mAdditionalClasspath;
+
 	final private URLClassLoader mJarClassLoader;
+	final private String mAdditionalClasspath;
 	final private String mTargetJarPath;
 	final private String mTemplatePath;
+	final private String outputDir;
 
-	public Stubber(String jarDirectory, String templateDir, String targetJar) {
-		mTemplatePath = templateDir;
-		mAdditionalClasspath = jarDirectory;
-		mTargetJarPath = jarDirectory + targetJar;
+	private Stubber(Builder builder) {
+		mTemplatePath = builder.templateDir;
+		mAdditionalClasspath = builder.dependenciesDir;
+		mTargetJarPath =  builder.targetJar;
+		outputDir = builder.outputDir;
 
-		mJarClassLoader = new URLClassLoader(
-				getAllJarsInDirectory(mAdditionalClasspath),
-				this.getClass().getClassLoader());
+		validate();
+
+		mJarClassLoader = new StubberClassLoader(
+				this.getClass().getClassLoader(),
+				mTargetJarPath,
+				mAdditionalClasspath);
 	}
 
-	private URL[] getAllJarsInDirectory(String path){
-		final File folder = new File(path);
-		final File[] listOfFiles = folder.listFiles();
-		final List<URL> listOfJars = new ArrayList<>();
+	private void validate() {
+		final List<FileValidator> validators = new ArrayList<>();
+		validators.add(new FileValidator("Template directory", mTemplatePath));
+		validators.add(new FileValidator("Target Jar", mTargetJarPath));
+		validators.add(new FileValidator("Output directory", outputDir));
+		validators.add(new FileValidator("Dependencies path", mAdditionalClasspath, true));
 
-		for (final File f : listOfFiles){
-			if (f.isFile()) {
-				if(f.getName().toLowerCase(Locale.US).endsWith("jar")){
-					System.out.println("File " + f.getName());
-					listOfJars.add(getUrl(f));
-				}
-
-			}
+		for(final FileValidator validator : validators){
+			validator.validate();
 		}
-
-		return listOfJars.toArray(new URL[0]);
 	}
 
 	private Class<?> getClass(String className){
@@ -57,8 +57,10 @@ public class Stubber {
 			c = Class.forName(className, false, mJarClassLoader);
 		} catch (ClassNotFoundException e) {
 			System.err.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
 		} catch (NoClassDefFoundError e){
 			System.err.println("ERROR: " + e.getMessage());
+			e.printStackTrace();
 		}
 
 		return c;
@@ -97,14 +99,7 @@ public class Stubber {
 		return classSet;
 	}
 
-	@SuppressWarnings({ "deprecation" })
-	private URL getUrl(File f){
-		try {
-			return f.toURL();
-		} catch (MalformedURLException e) {
-			return null;
-		}
-	}
+
 
 	public void listJarContents() {
 		final List<Class<?>> classSet = getClasses();
@@ -127,11 +122,42 @@ public class Stubber {
 		}
 
 		final ClassExporter exporter = new ClassExporter(
-				mAdditionalClasspath + "/export/",
+				outputDir,
 				mTemplatePath);
 
 		exporter.export(myClassArray);
 
 		System.out.println("  ----   DONE  -----");
 	}
+
+	public static class Builder {
+        private String dependenciesDir;
+		private String outputDir;
+        private String templateDir;
+        private String targetJar;
+
+        public Builder setDependencyDirectory(String directory) {
+            this.dependenciesDir = directory;
+            return this;
+        }
+
+		public Builder setOutputDir(String directory) {
+			this.outputDir = directory;
+			return this;
+		}
+
+        public Builder setOutputTemplateDir(String directory) {
+            this.templateDir = directory;
+            return this;
+        }
+
+        public Builder setTargetJar(String jar) {
+            this.targetJar = jar;
+            return this;
+        }
+
+        public Stubber build() {
+            return new Stubber(this);
+        }
+    }
 }
