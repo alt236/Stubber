@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -25,12 +23,14 @@ public class Stubber {
 	private final String mTargetJarPath;
 	private final String mTemplatePath;
 	private final String outputDir;
+	private final boolean blowOnReturn;
 
 	private Stubber(final Builder builder) {
 		mTemplatePath = builder.templateDir;
 		mAdditionalClasspath = builder.dependenciesDir;
 		mTargetJarPath =  builder.targetJar;
 		outputDir = builder.outputDir;
+		blowOnReturn = builder.blowOnReturn;
 
 		validate();
 
@@ -117,7 +117,6 @@ public class Stubber {
 
 	public void stubIt(){
 		final List<Class<?>> classArray = getClasses();
-		final Set<Class<?>> complatedClasses = new HashSet<>();
 		final List<ClassWrapper> myClassArray = WrapperFactory.getWrapper(classArray);
 
 		for(final Class<?> clazz : classArray){
@@ -127,7 +126,7 @@ public class Stubber {
 		final Exporter exporter = new Exporter(
 				outputDir,
 				mTemplatePath,
-				true);
+				blowOnReturn);
 
 		exporter.export(myClassArray);
 
@@ -139,6 +138,7 @@ public class Stubber {
 		private String outputDir;
         private String templateDir;
         private String targetJar;
+		private boolean blowOnReturn;
 
         public Builder setDependencyDirectory(final String directory) {
             this.dependenciesDir = directory;
@@ -159,6 +159,11 @@ public class Stubber {
             this.targetJar = jar;
             return this;
         }
+
+		public Builder setBlowOnReturn(final boolean value) {
+			this.blowOnReturn = value;
+			return this;
+		}
 
         public Stubber build() {
             return new Stubber(this);
