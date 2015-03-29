@@ -10,19 +10,19 @@ public class FileValidator {
     private final boolean optional;
     private final String description;
 
-    public FileValidator(final String description, final String path){
+    public FileValidator(final String description, final String path) {
         this(description, path, false);
     }
 
-    public FileValidator(final String description, final String path, final boolean optional){
+    public FileValidator(final String description, final String path, final boolean optional) {
         this.path = path;
         this.description = description;
         this.optional = optional;
     }
 
-    public void validate(){
-        if(path == null){
-            if(optional){
+    public void validate() {
+        if (path == null) {
+            if (optional) {
                 return;
             } else {
                 throw new IllegalArgumentException(description + " -- Path cannot be null!");
@@ -31,8 +31,8 @@ public class FileValidator {
 
         final File file = new File(path);
 
-        if(!optional){
-            if(!file.exists()){
+        if (!optional) {
+            if (!file.exists()) {
                 throw new IllegalArgumentException(description + " -- File '" + path + "' does not exist");
             }
         }

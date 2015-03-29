@@ -30,7 +30,7 @@ abstract class AbstractClassTemplate {
     private String methods;
     private String innerClasses;
 
-    protected AbstractClassTemplate(final String baseTemplatePath, final String template, final boolean blowOnReturn){
+    protected AbstractClassTemplate(final String baseTemplatePath, final String template, final boolean blowOnReturn) {
         this.templateManager = new TemplateManager(baseTemplatePath);
         this.formatter = new ClassPartFormatter(blowOnReturn);
         this.baseTemplatePath = baseTemplatePath;
@@ -86,39 +86,39 @@ abstract class AbstractClassTemplate {
         return data;
     }
 
-    private String apply(final String original, final String key, final String data, final String fallback){
-        if(data == null || data.trim().length() == 0){
+    private String apply(final String original, final String key, final String data, final String fallback) {
+        if (data == null || data.trim().length() == 0) {
             return original.replace(key, fallback);
         } else {
             return original.replace(key, data);
         }
     }
 
-    private String getTemplate(){
+    private String getTemplate() {
         return templateManager.getTemplate(key);
     }
 
-    private void setClassDefinitions(final String text){
+    private void setClassDefinitions(final String text) {
         classDefinition = text;
     }
 
-    private void setConstructors(final String text){
+    private void setConstructors(final String text) {
         constructors = text;
     }
 
-    private void setFields(final String text){
+    private void setFields(final String text) {
         fields = text;
     }
 
     public void setInnerClasses(final List<ClassWrapper> classes) {
 
-        if(classes.size() > 0){
+        if (classes.size() > 0) {
             final StringBuilder sb = new StringBuilder();
 
             final InnerClassTemplate template = new InnerClassTemplate(baseTemplatePath, blowOnReturn);
 
-            for(final ClassWrapper inner : classes){
-                if(inner.getExposure() == ReflectionUtils.Exposure.PUBLIC){
+            for (final ClassWrapper inner : classes) {
+                if (inner.getExposure() == ReflectionUtils.Exposure.PUBLIC) {
                     sb.append(template.build(inner));
                     sb.append('\n');
                 }
@@ -129,11 +129,11 @@ abstract class AbstractClassTemplate {
         }
     }
 
-    private void setMethods(final String text){
+    private void setMethods(final String text) {
         methods = text;
     }
 
-    private void setPackageName(final String text){
+    private void setPackageName(final String text) {
         packageName = text;
     }
 }

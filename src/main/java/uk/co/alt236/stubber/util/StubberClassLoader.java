@@ -11,17 +11,17 @@ import java.util.Locale;
 /**
  * Created by alex on 28/03/15.
  */
-public class StubberClassLoader extends URLClassLoader{
+public class StubberClassLoader extends URLClassLoader {
 
-    public StubberClassLoader(final ClassLoader classLoader, final String... jarPaths){
+    public StubberClassLoader(final ClassLoader classLoader, final String... jarPaths) {
         super(getAllJars(jarPaths), classLoader);
     }
 
-    private static URL[] getAllJars(final String... paths){
+    private static URL[] getAllJars(final String... paths) {
         final List<URL> listOfJars = new ArrayList<>();
 
-        for(final String path : paths) {
-            if(path != null) {
+        for (final String path : paths) {
+            if (path != null) {
                 final File f = new File(path);
                 if (f.isDirectory()) {
                     final File[] listOfFiles = f.listFiles();
@@ -46,12 +46,12 @@ public class StubberClassLoader extends URLClassLoader{
         return listOfJars.toArray(new URL[listOfJars.size()]);
     }
 
-    private static boolean isJarFile(final File file){
+    private static boolean isJarFile(final File file) {
         return file.getName().toLowerCase(Locale.US).endsWith("jar");
     }
 
-    @SuppressWarnings({ "deprecation" })
-    private static URL getUrl(final File f){
+    @SuppressWarnings({"deprecation"})
+    private static URL getUrl(final File f) {
         try {
             return f.toURL();
         } catch (final MalformedURLException e) {
