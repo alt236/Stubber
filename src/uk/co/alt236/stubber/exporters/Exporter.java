@@ -1,20 +1,20 @@
 package uk.co.alt236.stubber.exporters;
 
-import java.io.File;
-import java.util.List;
-
+import uk.co.alt236.stubber.containers.ClassWrapper;
 import uk.co.alt236.stubber.template.ClassTemplate;
 import uk.co.alt236.stubber.util.FileIo;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
-import uk.co.alt236.stubber.containers.ClassWrapper;
 
-public class ClassExporter {
+import java.io.File;
+import java.util.List;
+
+public class Exporter {
 	private final File mExportDirectory;
 	private final ClassTemplate classTemplate;
 
-	public ClassExporter (final String exportDir, final String templateDirectory){
+	public Exporter(final String exportDir, final String templateDirectory, final boolean blowOnException) {
 		mExportDirectory = new File(exportDir);
-		classTemplate = new ClassTemplate(templateDirectory);
+		classTemplate = new ClassTemplate(templateDirectory, blowOnException);
 	}
 
 	private void cleanup(){

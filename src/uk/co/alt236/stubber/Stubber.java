@@ -1,20 +1,22 @@
 package uk.co.alt236.stubber;
 
+import uk.co.alt236.stubber.containers.ClassWrapper;
+import uk.co.alt236.stubber.exporters.Exporter;
+import uk.co.alt236.stubber.util.StubberClassLoader;
+import uk.co.alt236.stubber.util.WrapperFactory;
+import uk.co.alt236.stubber.util.validators.FileValidator;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import uk.co.alt236.stubber.util.ReflectionUtils;
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.exporters.ClassExporter;
-import uk.co.alt236.stubber.util.StubberClassLoader;
-import uk.co.alt236.stubber.util.validators.FileValidator;
 
 public class Stubber {
 
@@ -115,15 +117,17 @@ public class Stubber {
 
 	public void stubIt(){
 		final List<Class<?>> classArray = getClasses();
-		final List<ClassWrapper> myClassArray = ReflectionUtils.getWrapper(classArray);
+		final Set<Class<?>> complatedClasses = new HashSet<>();
+		final List<ClassWrapper> myClassArray = WrapperFactory.getWrapper(classArray);
 
 		for(final Class<?> clazz : classArray){
 			myClassArray.add(new ClassWrapper(clazz));
 		}
 
-		final ClassExporter exporter = new ClassExporter(
+		final Exporter exporter = new Exporter(
 				outputDir,
-				mTemplatePath);
+				mTemplatePath,
+				true);
 
 		exporter.export(myClassArray);
 

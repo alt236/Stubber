@@ -5,7 +5,7 @@ package uk.co.alt236.stubber.template;
  */
 public class ClassTemplate extends AbstractClassTemplate{
 
-    public ClassTemplate(final String templateBasePath){
-        super(templateBasePath, TemplateManager.TEMPLATE_NAME_CLASS_FILE);
+    public ClassTemplate(final String templateBasePath, final boolean blowOnReturn){
+        super(templateBasePath, TemplateManager.TEMPLATE_NAME_CLASS_FILE, blowOnReturn);
     }
 }

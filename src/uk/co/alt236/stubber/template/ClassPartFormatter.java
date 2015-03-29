@@ -1,4 +1,9 @@
-package uk.co.alt236.stubber.exporters;
+package uk.co.alt236.stubber.template;
+
+import uk.co.alt236.stubber.containers.*;
+import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
+import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -7,17 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import uk.co.alt236.stubber.util.ReflectionUtils;
-import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
-import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.containers.ConstructorWrapper;
-import uk.co.alt236.stubber.containers.FieldWrapper;
-import uk.co.alt236.stubber.containers.MethodWrapper;
-import uk.co.alt236.stubber.containers.Modifiers;
+public class ClassPartFormatter {
+	private final boolean blowOnReturn;
 
-public class ClassExporterUtils {
-	public static String getClassDefinition(final ClassWrapper clazz){
+	public ClassPartFormatter(final boolean throwExceptionOnReturn) {
+		this.blowOnReturn = throwExceptionOnReturn;
+	}
+
+	public String getClassDefinition(final ClassWrapper clazz) {
 		final ClassType type = clazz.getType();
 		final ClassWrapper superClass = clazz.getSuperClass();
 		final List<ClassWrapper> interfaces = clazz.getInterfaces();
@@ -59,40 +61,45 @@ public class ClassExporterUtils {
 	}
 
 
-	private static String getMethodReturnStatement(final Class<?> fieldClass){
+	private String getMethodReturnStatement(final Class<?> fieldClass) {
 		final String value;
 		final String methodResult;
 
-		if(fieldClass.equals(Void.TYPE)){
-			methodResult = "";
+
+		if (blowOnReturn) {
+			methodResult = "throw new UnsupportedOperationException(\"Stub!\");";
 		} else {
-			if(fieldClass == int.class){
-				value = "0";
-			}else if(fieldClass == double.class){
-				value = "0.0";
-			} else if (fieldClass == boolean.class){
-				value = "false";
-			} else if (fieldClass == float.class){
-				value = "0.0";
-			} else if (fieldClass == String.class){
-				value = "null";
-			} else if (fieldClass == short.class){
-				value = "0";
-			} else if (fieldClass == byte.class){
-				value = "0";
-			} else if (fieldClass == long.class){
-				value = "0";
-			} else if (fieldClass == char.class){
-				value = "0";
+			if (fieldClass.equals(Void.TYPE)) {
+				methodResult = "";
 			} else {
-				value = "null";
+				if (fieldClass == int.class) {
+					value = "0";
+				} else if (fieldClass == double.class) {
+					value = "0.0";
+				} else if (fieldClass == boolean.class) {
+					value = "false";
+				} else if (fieldClass == float.class) {
+					value = "0.0";
+				} else if (fieldClass == String.class) {
+					value = "null";
+				} else if (fieldClass == short.class) {
+					value = "0";
+				} else if (fieldClass == byte.class) {
+					value = "0";
+				} else if (fieldClass == long.class) {
+					value = "0";
+				} else if (fieldClass == char.class) {
+					value = "0";
+				} else {
+					value = "null";
+				}
+				methodResult = "return " + value + ";";
 			}
-			methodResult = "return " + value + ";";
 		}
 		return methodResult;
 	}
 
-	public static String getConstructors(final ClassWrapper clazz) {
+	public String getConstructors(final ClassWrapper clazz) {
 		final StringBuilder sb = new StringBuilder();
 
 		boolean wroteSomething = false;
@@ -140,7 +147,7 @@ public class ClassExporterUtils {
 		return sb.toString();
 	}
 
-	public static String getFieldDefinition(final ClassWrapper clazz){
+	public String getFieldDefinition(final ClassWrapper clazz) {
 		final StringBuilder sb = new StringBuilder();
 
 		boolean wroteSomething = false;
@@ -236,7 +243,7 @@ public class ClassExporterUtils {
 	}
 
 
-	public static String getMethods(final ClassWrapper clazz){
+	public String getMethods(final ClassWrapper clazz) {
 		final StringBuilder sb = new StringBuilder();
 		final boolean isInterface = clazz.getType() == ClassType.INTERFACE;
 
@@ -306,7 +313,7 @@ public class ClassExporterUtils {
 	}
 
 
-	private static List<String> getModifiers(final Modifiers mod){
+	private List<String> getModifiers(final Modifiers mod) {
 		final List<String> modifiers = new ArrayList<>();
 
 		if(mod.getExposure() != Exposure.DEFAULT){

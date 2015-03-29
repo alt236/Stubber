@@ -1,7 +1,6 @@
 package uk.co.alt236.stubber.template;
 
 import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.exporters.ClassExporterUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils;
 
 import java.util.List;
@@ -19,8 +18,10 @@ abstract class AbstractClassTemplate {
     private static final String NO_CONSTRUCTORS = TAB + "// NO VISIBLE CONSTRUCTORS!";
 
     private final TemplateManager templateManager;
+    private final ClassPartFormatter formatter;
     private final String baseTemplatePath;
     private final String key;
+    private final boolean blowOnReturn;
 
     private String packageName;
     private String classDefinition;
@@ -29,18 +30,20 @@ abstract class AbstractClassTemplate {
     private String methods;
     private String innerClasses;
 
-    protected AbstractClassTemplate(final String baseTemplatePath, final String template){
+    protected AbstractClassTemplate(final String baseTemplatePath, final String template, final boolean blowOnReturn){
         this.templateManager = new TemplateManager(baseTemplatePath);
+        this.formatter = new ClassPartFormatter(blowOnReturn);
         this.baseTemplatePath = baseTemplatePath;
+        this.blowOnReturn = blowOnReturn;
         this.key = template;
     }
 
     public String build(final ClassWrapper clazz) {
         setPackageName(clazz.getPackageName());
-        setClassDefinitions(ClassExporterUtils.getClassDefinition(clazz));
-        setConstructors(ClassExporterUtils.getConstructors(clazz));
-        setFields(ClassExporterUtils.getFieldDefinition(clazz));
-        setMethods(ClassExporterUtils.getMethods(clazz));
+        setClassDefinitions(formatter.getClassDefinition(clazz));
+        setConstructors(formatter.getConstructors(clazz));
+        setFields(formatter.getFieldDefinition(clazz));
+        setMethods(formatter.getMethods(clazz));
         setInnerClasses(clazz.getInnerClasses());
 
         return build();
@@ -112,7 +115,7 @@ abstract class AbstractClassTemplate {
         if(classes.size() > 0){
             final StringBuilder sb = new StringBuilder();
 
-            final InnerClassTemplate template = new InnerClassTemplate(baseTemplatePath);
+            final InnerClassTemplate template = new InnerClassTemplate(baseTemplatePath, blowOnReturn);
 
             for(final ClassWrapper inner : classes){
                 if(inner.getExposure() == ReflectionUtils.Exposure.PUBLIC){

@@ -1,10 +1,12 @@
 package uk.co.alt236.stubber.containers;
-import java.lang.reflect.Modifier;
-import java.util.List;
 
 import uk.co.alt236.stubber.util.ReflectionUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
+import uk.co.alt236.stubber.util.WrapperFactory;
+
+import java.lang.reflect.Modifier;
+import java.util.List;
 
 
 public class ClassWrapper implements Modifiers{
@@ -18,18 +20,14 @@ public class ClassWrapper implements Modifiers{
 	private final String mPackageName;
 
 	public ClassWrapper(final Class<?> clazz){
+		System.out.println("\t\t\t Creating '" + clazz + "'");
 		mClass = clazz;
-		mFields = ReflectionUtils.getWrapper(mClass.getFields());
-		mMethods = ReflectionUtils.getWrapper(mClass.getDeclaredMethods());
+		mFields = WrapperFactory.getWrapper(mClass.getFields());
+		mMethods = WrapperFactory.getWrapper(mClass.getDeclaredMethods());
 		mPackageName = ReflectionUtils.getPackageName(clazz);
-		mInterfaces = ReflectionUtils.getWrapper(mClass.getInterfaces());
-		mConstructors = ReflectionUtils.getWrapper(mClass.getDeclaredConstructors());
-
-		//if(getInnerClasses){
-			mInnerClasses = ReflectionUtils.getWrapper(mClass.getDeclaredClasses());
-		//} else {
-		//	mInnerClasses = new ArrayList<>();
-		//}
+		mInterfaces = WrapperFactory.getWrapper(mClass.getInterfaces());
+		mConstructors = WrapperFactory.getWrapper(mClass.getDeclaredConstructors());
+		mInnerClasses = WrapperFactory.getWrapper(mClass.getDeclaredClasses());
 	}
 
 	public String getCanonicalName(){
