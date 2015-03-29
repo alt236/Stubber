@@ -102,7 +102,6 @@ public class Stubber {
 	}
 
 
-
 	public void listJarContents() {
 		final List<Class<?>> classSet = getClasses();
 		for(final Class<?> clazz : classSet){
