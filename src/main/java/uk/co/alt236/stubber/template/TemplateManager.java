@@ -9,27 +9,28 @@ import java.util.Set;
 import java.util.TreeSet;
 
 class TemplateManager {
-    public static final String TEMPLATE_NAME_CLASS_FILE = "class_file.template";
-    public static final String TEMPLATE_NAME_INNER_CLASS = "inner_class.template";
 
-    private final Map<String, String> mTemplateMap = new HashMap<>();
+  public static final String TEMPLATE_NAME_CLASS_FILE = "class_file.template";
+  public static final String TEMPLATE_NAME_INNER_CLASS = "inner_class.template";
 
-    public TemplateManager(final String basePath) {
-        final Set<String> templateNames = new TreeSet<>();
-        templateNames.add(TEMPLATE_NAME_CLASS_FILE);
-        templateNames.add(TEMPLATE_NAME_INNER_CLASS);
+  private final Map<String, String> mTemplateMap = new HashMap<>();
 
-        for (final String templateName : templateNames) {
-            try {
-                final String template = FileIo.readFileAsString(basePath + templateName);
-                mTemplateMap.put(templateName, template);
-            } catch (final IOException e) {
-                throw new IllegalStateException(e);
-            }
-        }
+  public TemplateManager(final String basePath) {
+    final Set<String> templateNames = new TreeSet<>();
+    templateNames.add(TEMPLATE_NAME_CLASS_FILE);
+    templateNames.add(TEMPLATE_NAME_INNER_CLASS);
+
+    for (final String templateName : templateNames) {
+      try {
+        final String template = FileIo.readFileAsString(basePath + templateName);
+        mTemplateMap.put(templateName, template);
+      } catch (final IOException e) {
+        throw new IllegalStateException(e);
+      }
     }
+  }
 
-    public String getTemplate(final String key) {
-        return mTemplateMap.get(key);
-    }
+  public String getTemplate(final String key) {
+    return mTemplateMap.get(key);
+  }
 }

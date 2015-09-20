@@ -4,19 +4,20 @@ import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
 
 public interface Modifiers {
-    public Exposure getExposure();
 
-    public boolean isAbstract();
+  public Exposure getExposure();
 
-    public boolean isFinal();
+  public boolean isAbstract();
 
-    public boolean isStatic();
+  public boolean isFinal();
 
-    public boolean isStaticFinal();
+  public boolean isStatic();
 
-    public boolean isSynchronized();
+  public boolean isStaticFinal();
 
-    public boolean isTransient();
+  public boolean isSynchronized();
 
-    public boolean isVolatile();
+  public boolean isTransient();
+
+  public boolean isVolatile();
 }

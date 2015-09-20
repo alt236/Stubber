@@ -1,6 +1,12 @@
 package uk.co.alt236.stubber.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 public final class FileIo {
 
@@ -12,11 +18,11 @@ public final class FileIo {
             for (final File c : f.listFiles()) {
                 deleteRecursively(c);
             }
-        }
+    }
 
         if (!f.delete()) {
             throw new IllegalStateException("Failed to delete file: " + f);
-        }
+    }
     }
 
     public static String readFileAsString(final String filePath) throws java.io.IOException {
@@ -29,7 +35,7 @@ public final class FileIo {
             final String readData = String.valueOf(buf, 0, numRead);
             fileData.append(readData);
             buf = new char[1024];
-        }
+    }
         reader.close();
         return fileData.toString();
     }
@@ -42,9 +48,12 @@ public final class FileIo {
      * @param append  the append
      * @param newline whether to append a newline at the end to the string.
      */
-    public static void writeToFile(final File file, final String text, final boolean append, final boolean newline) {
+    public static void writeToFile(final File file, final String text, final boolean append,
+                                   final boolean newline) {
         try {
-            final OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8");
+            final OutputStreamWriter
+                    osw =
+                    new OutputStreamWriter(new FileOutputStream(file, append), "UTF-8");
             final BufferedWriter bw = new BufferedWriter(osw);
             bw.write(text);
             if (newline) {
@@ -54,7 +63,7 @@ public final class FileIo {
         } catch (final Exception e) {
             System.err.println("ERROR: Error when writing to '" + file + "': " + e.getMessage());
             e.printStackTrace();
-        }
+    }
 
     }
 }

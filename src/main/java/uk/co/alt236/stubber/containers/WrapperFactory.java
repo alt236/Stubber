@@ -11,51 +11,51 @@ import java.util.List;
  */
 public final class WrapperFactory {
 
-    private WrapperFactory() {
-        // NOPE
+  private WrapperFactory() {
+    // NOPE
+  }
+
+  public static List<ClassWrapper> getWrapper(final Class<?>[] array) {
+    final List<ClassWrapper> result = new ArrayList<>();
+
+    for (final Class<?> clazz : array) {
+      result.add(new ClassWrapper(clazz));
     }
 
-    public static List<ClassWrapper> getWrapper(final Class<?>[] array) {
-        final List<ClassWrapper> result = new ArrayList<>();
+    return result;
+  }
 
-        for (final Class<?> clazz : array) {
-            result.add(new ClassWrapper(clazz));
-        }
+  public static List<ConstructorWrapper> getWrapper(final Constructor<?>[] array) {
+    final List<ConstructorWrapper> result = new ArrayList<>();
 
-        return result;
+    for (final Constructor<?> method : array) {
+      result.add(new ConstructorWrapper(method));
     }
 
-    public static List<ConstructorWrapper> getWrapper(final Constructor<?>[] array) {
-        final List<ConstructorWrapper> result = new ArrayList<>();
+    return result;
+  }
 
-        for (final Constructor<?> method : array) {
-            result.add(new ConstructorWrapper(method));
-        }
+  public static List<FieldWrapper> getWrapper(final Field[] array) {
+    final List<FieldWrapper> result = new ArrayList<>();
 
-        return result;
+    for (final Field member : array) {
+      result.add(new FieldWrapper(member));
     }
 
-    public static List<FieldWrapper> getWrapper(final Field[] array) {
-        final List<FieldWrapper> result = new ArrayList<>();
+    return result;
+  }
 
-        for (final Field member : array) {
-            result.add(new FieldWrapper(member));
-        }
+  public static List<ClassWrapper> getWrapper(final List<Class<?>> list) {
+    return getWrapper(list.toArray(new Class<?>[list.size()]));
+  }
 
-        return result;
+  public static List<MethodWrapper> getWrapper(final Method[] array) {
+    final List<MethodWrapper> result = new ArrayList<>();
+
+    for (final Method method : array) {
+      result.add(new MethodWrapper(method));
     }
 
-    public static List<ClassWrapper> getWrapper(final List<Class<?>> list) {
-        return getWrapper(list.toArray(new Class<?>[list.size()]));
-    }
-
-    public static List<MethodWrapper> getWrapper(final Method[] array) {
-        final List<MethodWrapper> result = new ArrayList<>();
-
-        for (final Method method : array) {
-            result.add(new MethodWrapper(method));
-        }
-
-        return result;
-    }
+    return result;
+  }
 }

@@ -32,22 +32,18 @@ public class StubberClassLoader extends URLClassLoader {
                                 System.out.println("File " + file.getName());
                                 listOfJars.add(getUrl(file));
                             }
-                        }
+            }
                     }
                 } else {
                     if (isJarFile(f)) {
                         System.out.println("File " + f.getName());
                         listOfJars.add(getUrl(f));
                     }
-                }
-            }
         }
-
-        return listOfJars.toArray(new URL[listOfJars.size()]);
+            }
     }
 
-    private static boolean isJarFile(final File file) {
-        return file.getName().toLowerCase(Locale.US).endsWith("jar");
+        return listOfJars.toArray(new URL[listOfJars.size()]);
     }
 
     @SuppressWarnings({"deprecation"})
@@ -56,6 +52,10 @@ public class StubberClassLoader extends URLClassLoader {
             return f.toURL();
         } catch (final MalformedURLException e) {
             return null;
-        }
+    }
+    }
+
+    private static boolean isJarFile(final File file) {
+        return file.getName().toLowerCase(Locale.US).endsWith("jar");
     }
 }
