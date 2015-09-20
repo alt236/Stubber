@@ -139,31 +139,70 @@ public final class Stubber {
         private String targetJar;
         private boolean blowOnReturn;
 
+        /**
+         * Set the directory where any dependencies of the target Jar are located
+         *
+         * @param directory the directory where the dependencies are located
+         * @return this {@link uk.co.alt236.stubber.Stubber.Builder} object
+         */
         public Builder setDependencyDirectory(final String directory) {
             this.dependenciesDir = directory;
             return this;
         }
 
+        /**
+         * Set the directory where the created stub classes will be saved.
+         * This directory will be auto deleted before each run.
+         *
+         * @param directory the target directory
+         * @return this {@link uk.co.alt236.stubber.Stubber.Builder} object
+         */
         public Builder setOutputDir(final String directory) {
             this.outputDir = directory;
             return this;
         }
 
+        /**
+         * Set the directory where the output file templates are located.
+         *
+         * @param directory the template directory
+         * @return this {@link uk.co.alt236.stubber.Stubber.Builder} object
+         */
         public Builder setOutputTemplateDir(final String directory) {
             this.templateDir = directory;
             return this;
         }
 
+        /**
+         * Set the location of the Jar file you want to stub.
+         *
+         * @param jar the target Jar file
+         * @return this {@link uk.co.alt236.stubber.Stubber.Builder} object
+         */
         public Builder setTargetJar(final String jar) {
             this.targetJar = jar;
             return this;
         }
 
+        /**
+         * Set what happens when a stubbed method gets called.
+         * If set to TRUE then the stubbed method will throw an {@link UnsupportedOperationException}.
+         * If set to FALSE then the method will do nothing if the return type is void, or return the default value of
+         * primitive return types, or null otherwise.
+         *
+         * @param value whether or not a stubbed method should blow up
+         * @return this {@link uk.co.alt236.stubber.Stubber.Builder} object
+         */
         public Builder setBlowOnReturn(final boolean value) {
             this.blowOnReturn = value;
             return this;
         }
 
+        /**
+         * Will construct a {@link Stubber} with the settings of this builder.
+         *
+         * @return a constructed {@link Stubber}
+         */
         public Stubber build() {
             return new Stubber(this);
         }

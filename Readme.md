@@ -1,7 +1,11 @@
 Stubber
 -----------
 
-This app will make a stub copy of the code of a Jar.
+This app will make a stub copy of the code in a Jar file.
+
+Pretty hastily written for an issue at hand.
+
+To see how it works, have a look into `StubThis.java`
 
 Known Limitations
 -----------
