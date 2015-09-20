@@ -1,9 +1,9 @@
 package uk.co.alt236.stubber;
 
 import uk.co.alt236.stubber.containers.ClassWrapper;
+import uk.co.alt236.stubber.containers.WrapperFactory;
 import uk.co.alt236.stubber.exporters.Exporter;
 import uk.co.alt236.stubber.util.StubberClassLoader;
-import uk.co.alt236.stubber.util.WrapperFactory;
 import uk.co.alt236.stubber.util.validators.FileValidator;
 
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class Stubber {
+public final class Stubber {
 
     private final URLClassLoader mJarClassLoader;
     private final String mAdditionalClasspath;

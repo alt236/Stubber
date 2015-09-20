@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 public class FieldWrapper implements Modifiers {
     private final Field mMember;
 
-    public FieldWrapper(final Field member) {
+    /* package */ FieldWrapper(final Field member) {
         mMember = member;
     }
 

@@ -20,7 +20,7 @@ public class Exporter {
     private void cleanup() {
         if (mExportDirectory.exists()) {
             try {
-                FileIo.delete(mExportDirectory);
+                FileIo.deleteRecursively(mExportDirectory);
             } catch (final Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -66,7 +66,7 @@ public class Exporter {
 
             final File classFile = new File(
                     packagePath,
-                    clazz.getSimplename() + ".java");
+                    clazz.getSimpleName() + ".java");
 
 
             final String classContent = classTemplate.build(clazz);

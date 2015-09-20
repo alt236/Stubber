@@ -86,7 +86,7 @@ abstract class AbstractClassTemplate {
         return data;
     }
 
-    private String apply(final String original, final String key, final String data, final String fallback) {
+    private static String apply(final String original, final String key, final String data, final String fallback) {
         if (data == null || data.trim().length() == 0) {
             return original.replace(key, fallback);
         } else {

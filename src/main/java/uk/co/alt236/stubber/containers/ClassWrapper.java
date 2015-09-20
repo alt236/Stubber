@@ -3,7 +3,6 @@ package uk.co.alt236.stubber.containers;
 import uk.co.alt236.stubber.util.ReflectionUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
-import uk.co.alt236.stubber.util.WrapperFactory;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -63,7 +62,7 @@ public class ClassWrapper implements Modifiers {
         return mPackageName;
     }
 
-    public String getSimplename() {
+    public String getSimpleName() {
         return mClass.getSimpleName();
     }
 

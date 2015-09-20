@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 public class MethodWrapper implements Modifiers {
     private final Method mMember;
 
-    public MethodWrapper(final Method member) {
+    /* package */ MethodWrapper(final Method member) {
         mMember = member;
     }
 

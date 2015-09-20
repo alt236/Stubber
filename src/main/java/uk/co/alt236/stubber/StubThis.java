@@ -1,6 +1,9 @@
 package uk.co.alt236.stubber;
 
-public class StubThis {
+public final class StubThis {
+
+    private StubThis() {
+    }
 
     public static void main(final String[] args) {
         final Stubber stubber = new Stubber.Builder()

@@ -4,8 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Modifier;
 
-public class ReflectionUtils {
+public final class ReflectionUtils {
     private static final String PACKAGE_SEPARATOR = ".";
+
+    private ReflectionUtils() {
+    }
 
     public static ClassType getClassType(final Class<?> clazz) {
         if (Modifier.isInterface(clazz.getModifiers())) {

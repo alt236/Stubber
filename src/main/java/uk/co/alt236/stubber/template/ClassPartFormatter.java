@@ -33,7 +33,7 @@ public class ClassPartFormatter {
 
         sb.append(type.name().toLowerCase(Locale.US));
         sb.append(' ');
-        sb.append(clazz.getSimplename());
+        sb.append(clazz.getSimpleName());
 
 
         if (superClass != null) {
@@ -46,14 +46,14 @@ public class ClassPartFormatter {
             sb.append(" implements ");
             boolean firstRun = true;
 
-            for (final ClassWrapper iface : interfaces) {
+            for (final ClassWrapper iFace : interfaces) {
                 if (!firstRun) {
                     sb.append(", ");
                 } else {
                     firstRun = true;
                 }
 
-                sb.append(iface.getCanonicalName());
+                sb.append(iFace.getCanonicalName());
             }
         }
 

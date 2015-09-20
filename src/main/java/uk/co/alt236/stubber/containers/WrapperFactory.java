@@ -1,9 +1,4 @@
-package uk.co.alt236.stubber.util;
-
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.containers.ConstructorWrapper;
-import uk.co.alt236.stubber.containers.FieldWrapper;
-import uk.co.alt236.stubber.containers.MethodWrapper;
+package uk.co.alt236.stubber.containers;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -14,7 +9,12 @@ import java.util.List;
 /**
  * Created by alex on 28/03/15.
  */
-public class WrapperFactory {
+public final class WrapperFactory {
+
+    private WrapperFactory() {
+        // NOPE
+    }
+
     public static List<ClassWrapper> getWrapper(final Class<?>[] array) {
         final List<ClassWrapper> result = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class WrapperFactory {
     }
 
     public static List<ClassWrapper> getWrapper(final List<Class<?>> list) {
-        return getWrapper(list.toArray(new Class<?>[0]));
+        return getWrapper(list.toArray(new Class<?>[list.size()]));
     }
 
     public static List<MethodWrapper> getWrapper(final Method[] array) {

@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 public class ConstructorWrapper implements Modifiers {
     private final Constructor<?> mMember;
 
-    public ConstructorWrapper(final Constructor<?> member) {
+    /* package */ ConstructorWrapper(final Constructor<?> member) {
         mMember = member;
     }
 

@@ -2,12 +2,15 @@ package uk.co.alt236.stubber.util;
 
 import java.io.*;
 
-public class FileIo {
+public final class FileIo {
 
-    public static void delete(final File f) throws IOException {
+    private FileIo() {
+    }
+
+    public static void deleteRecursively(final File f) throws IOException {
         if (f.isDirectory()) {
             for (final File c : f.listFiles()) {
-                delete(c);
+                deleteRecursively(c);
             }
         }
 
