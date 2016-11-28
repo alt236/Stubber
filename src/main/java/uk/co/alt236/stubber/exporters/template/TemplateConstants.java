@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters.v2.template;
+package uk.co.alt236.stubber.exporters.template;
 
 /*package*/ final class TemplateConstants {
 
