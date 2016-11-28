@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters.v1.template;
+package uk.co.alt236.stubber.exporters.template;
 
 public class ClassTemplate extends AbstractClassTemplate {
 

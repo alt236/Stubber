@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters.v2.template.sections;
+package uk.co.alt236.stubber.exporters.template.sections;
 
 import uk.co.alt236.stubber.util.ReflectionUtils;
 

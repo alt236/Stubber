@@ -1,7 +1,7 @@
-package uk.co.alt236.stubber.exporters.v2;
+package uk.co.alt236.stubber.exporters;
 
 
-import uk.co.alt236.stubber.exporters.v2.template.ClassTemplate;
+import uk.co.alt236.stubber.exporters.template.ClassTemplate;
 import uk.co.alt236.stubber.util.FileIo;
 
 import java.io.File;

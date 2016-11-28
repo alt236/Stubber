@@ -1,9 +1,9 @@
-package uk.co.alt236.stubber.exporters.v2.template;
+package uk.co.alt236.stubber.exporters.template;
 
-import uk.co.alt236.stubber.exporters.v2.template.sections.ClassFormatter;
-import uk.co.alt236.stubber.exporters.v2.template.sections.ConstructorFormatter;
-import uk.co.alt236.stubber.exporters.v2.template.sections.FieldFormatter;
-import uk.co.alt236.stubber.exporters.v2.template.sections.MethodFormatter;
+import uk.co.alt236.stubber.exporters.template.sections.ClassFormatter;
+import uk.co.alt236.stubber.exporters.template.sections.ConstructorFormatter;
+import uk.co.alt236.stubber.exporters.template.sections.FieldFormatter;
+import uk.co.alt236.stubber.exporters.template.sections.MethodFormatter;
 
 abstract class AbstractClassTemplate {
 
