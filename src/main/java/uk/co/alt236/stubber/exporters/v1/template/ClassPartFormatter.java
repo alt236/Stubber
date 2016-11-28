@@ -1,10 +1,10 @@
-package uk.co.alt236.stubber.template;
+package uk.co.alt236.stubber.exporters.v1.template;
 
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.containers.ConstructorWrapper;
-import uk.co.alt236.stubber.containers.FieldWrapper;
-import uk.co.alt236.stubber.containers.MethodWrapper;
-import uk.co.alt236.stubber.containers.Modifiers;
+import uk.co.alt236.stubber.exporters.v1.containers.ClassWrapper;
+import uk.co.alt236.stubber.exporters.v1.containers.ConstructorWrapper;
+import uk.co.alt236.stubber.exporters.v1.containers.FieldWrapper;
+import uk.co.alt236.stubber.exporters.v1.containers.MethodWrapper;
+import uk.co.alt236.stubber.exporters.v1.containers.Modifiers;
 import uk.co.alt236.stubber.util.ReflectionUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;

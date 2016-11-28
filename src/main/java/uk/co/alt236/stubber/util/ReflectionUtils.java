@@ -23,7 +23,7 @@ public final class ReflectionUtils {
     return getExposure(clazz.getModifiers());
   }
 
-  private static Exposure getExposure(final int modifiers) {
+  public static Exposure getExposure(final int modifiers) {
     if (Modifier.isPrivate(modifiers)) {
       return Exposure.PRIVATE;
     } else if (Modifier.isPublic(modifiers)) {

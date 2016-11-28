@@ -1,20 +1,20 @@
-package uk.co.alt236.stubber.containers;
+package uk.co.alt236.stubber.exporters.v1.containers;
 
 import uk.co.alt236.stubber.util.ReflectionUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-public class FieldWrapper implements Modifiers {
+public class MethodWrapper implements Modifiers {
 
-  private final Field mMember;
+  private final Method mMember;
 
-  /* package */ FieldWrapper(final Field member) {
+  /* package */ MethodWrapper(final Method member) {
     mMember = member;
   }
 
-  public Field getEncapsulatedMember() {
+  public Method getEncapsulatedMember() {
     return mMember;
   }
 
@@ -27,8 +27,12 @@ public class FieldWrapper implements Modifiers {
     return mMember.getName();
   }
 
-  public String getTypeAsString() {
-    return ReflectionUtils.getSaneType(mMember);
+  public Class<?> getReturnType() {
+    return mMember.getReturnType();
+  }
+
+  public String getReturnTypeAsString() {
+    return ReflectionUtils.getSaneType(mMember.getReturnType());
   }
 
   @Override

@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.containers;
+package uk.co.alt236.stubber.exporters.v1.containers;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -6,9 +6,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by alex on 28/03/15.
- */
 public final class WrapperFactory {
 
   private WrapperFactory() {

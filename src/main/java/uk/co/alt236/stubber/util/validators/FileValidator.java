@@ -2,9 +2,6 @@ package uk.co.alt236.stubber.util.validators;
 
 import java.io.File;
 
-/**
- * Created by alex on 28/03/15.
- */
 public class FileValidator {
 
   private final String path;
