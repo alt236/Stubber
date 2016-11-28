@@ -1,17 +1,16 @@
 package uk.co.alt236.stubber;
 
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.containers.WrapperFactory;
-import uk.co.alt236.stubber.exporters.Exporter;
+import uk.co.alt236.stubber.exporters.v2.Containers2.FullClassListFactory;
+import uk.co.alt236.stubber.exporters.v2.Exporter2;
 import uk.co.alt236.stubber.util.StubberClassLoader;
 import uk.co.alt236.stubber.util.validators.FileValidator;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -45,10 +44,7 @@ public final class Stubber {
 
     try {
       c = Class.forName(className, false, mJarClassLoader);
-    } catch (final ClassNotFoundException e) {
-      System.err.println("ERROR: " + e.getMessage());
-      e.printStackTrace();
-    } catch (final NoClassDefFoundError e) {
+    } catch (final ClassNotFoundException | NoClassDefFoundError e) {
       System.err.println("ERROR: " + e.getMessage());
       e.printStackTrace();
     }
@@ -81,8 +77,6 @@ public final class Stubber {
       }
 
       zip.close();
-    } catch (final FileNotFoundException e) {
-      e.printStackTrace();
     } catch (final IOException e) {
       e.printStackTrace();
     }
@@ -102,20 +96,32 @@ public final class Stubber {
     }
   }
 
+//  public void stubIt() {
+//    final List<Class<?>> classArray = getClasses();
+//    final List<ClassWrapper> myClassArray = WrapperFactory.getWrapper(classArray);
+//
+//    final Exporter exporterOld = new Exporter(
+//        outputDir,
+//        mTemplatePath,
+//        blowOnReturn);
+//
+//    exporterOld.export(myClassArray);
+//
+//    System.out.println("  ----   DONE  -----");
+//  }
+
+
   public void stubIt() {
+    final FullClassListFactory factory = new FullClassListFactory();
     final List<Class<?>> classArray = getClasses();
-    final List<ClassWrapper> myClassArray = WrapperFactory.getWrapper(classArray);
+    final Collection<Class<?>> myClassArray = factory.getAllClasses(classArray);
 
-    for (final Class<?> clazz : classArray) {
-      myClassArray.add(new ClassWrapper(clazz));
-    }
-
-    final Exporter exporter = new Exporter(
+    final Exporter2 exporter2 = new Exporter2(
         outputDir,
         mTemplatePath,
         blowOnReturn);
 
-    exporter.export(myClassArray);
+    exporter2.export(myClassArray);
 
     System.out.println("  ----   DONE  -----");
   }

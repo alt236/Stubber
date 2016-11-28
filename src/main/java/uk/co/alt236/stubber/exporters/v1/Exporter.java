@@ -1,7 +1,7 @@
-package uk.co.alt236.stubber.exporters;
+package uk.co.alt236.stubber.exporters.v1;
 
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.template.ClassTemplate;
+import uk.co.alt236.stubber.exporters.v1.containers.ClassWrapper;
+import uk.co.alt236.stubber.exporters.v1.template.ClassTemplate;
 import uk.co.alt236.stubber.util.FileIo;
 import uk.co.alt236.stubber.util.ReflectionUtils.Exposure;
 

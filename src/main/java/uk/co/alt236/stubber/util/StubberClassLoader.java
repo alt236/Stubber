@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by alex on 28/03/15.
- */
 public class StubberClassLoader extends URLClassLoader {
 
     public StubberClassLoader(final ClassLoader classLoader, final String... jarPaths) {

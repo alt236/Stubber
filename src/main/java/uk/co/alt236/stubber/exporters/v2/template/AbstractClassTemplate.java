@@ -1,13 +1,10 @@
-package uk.co.alt236.stubber.template;
+package uk.co.alt236.stubber.exporters.v2.template;
 
-import uk.co.alt236.stubber.containers.ClassWrapper;
-import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.exporters.v2.template.sections.ClassFormatter;
+import uk.co.alt236.stubber.exporters.v2.template.sections.ConstructorFormatter;
+import uk.co.alt236.stubber.exporters.v2.template.sections.FieldFormatter;
+import uk.co.alt236.stubber.exporters.v2.template.sections.MethodFormatter;
 
-import java.util.List;
-
-/**
- * Created by alex on 28/03/15.
- */
 abstract class AbstractClassTemplate {
 
   private static final String TAB = "\t";
@@ -19,11 +16,14 @@ abstract class AbstractClassTemplate {
   private static final String NO_CONSTRUCTORS = TAB + "// NO VISIBLE CONSTRUCTORS!";
 
   private final TemplateManager templateManager;
-  private final ClassPartFormatter formatter;
   private final String baseTemplatePath;
   private final String key;
   private final boolean blowOnReturn;
 
+  private final ClassFormatter classFormatter;
+  private final ConstructorFormatter constructorFormatter;
+  private final FieldFormatter fieldFormatter;
+  private final MethodFormatter methodFormatter;
   private String packageName;
   private String classDefinition;
   private String constructors;
@@ -31,17 +31,25 @@ abstract class AbstractClassTemplate {
   private String methods;
   private String innerClasses;
 
-  protected AbstractClassTemplate(final String baseTemplatePath, final String template,
+  protected AbstractClassTemplate(final String baseTemplatePath,
+                                  final String template,
                                   final boolean blowOnReturn) {
+
     this.templateManager = new TemplateManager(baseTemplatePath);
-    this.formatter = new ClassPartFormatter(blowOnReturn);
+    this.classFormatter = new ClassFormatter();
+    this.constructorFormatter = new ConstructorFormatter();
+    this.fieldFormatter = new FieldFormatter();
+    this.methodFormatter = new MethodFormatter(blowOnReturn);
     this.baseTemplatePath = baseTemplatePath;
     this.blowOnReturn = blowOnReturn;
     this.key = template;
   }
 
-  private static String apply(final String original, final String key, final String data,
+  private static String apply(final String original,
+                              final String key,
+                              final String data,
                               final String fallback) {
+
     if (data == null || data.trim().length() == 0) {
       return original.replace(key, fallback);
     } else {
@@ -49,13 +57,13 @@ abstract class AbstractClassTemplate {
     }
   }
 
-  public String build(final ClassWrapper clazz) {
-    setPackageName(clazz.getPackageName());
-    setClassDefinitions(formatter.getClassDefinition(clazz));
-    setConstructors(formatter.getConstructors(clazz));
-    setFields(formatter.getFieldDefinition(clazz));
-    setMethods(formatter.getMethods(clazz));
-    setInnerClasses(clazz.getInnerClasses());
+  public String build(final Class<?> clazz) {
+    packageName = clazz.getPackage().getName();
+    classDefinition = classFormatter.getClassDefinition(clazz);
+    constructors = constructorFormatter.getConstructors(clazz);
+    fields = fieldFormatter.getFieldDefinition(clazz);
+    methods = methodFormatter.getMethods(clazz);
+    innerClasses = getInnerClasses(clazz.getDeclaredClasses());
 
     return build();
   }
@@ -96,46 +104,28 @@ abstract class AbstractClassTemplate {
     return data;
   }
 
-  private String getTemplate() {
-    return templateManager.getTemplate(key);
-  }
+  public String getInnerClasses(final Class<?>[] classes) {
+    final String retVal;
 
-  private void setClassDefinitions(final String text) {
-    classDefinition = text;
-  }
-
-  private void setConstructors(final String text) {
-    constructors = text;
-  }
-
-  private void setFields(final String text) {
-    fields = text;
-  }
-
-  public void setInnerClasses(final List<ClassWrapper> classes) {
-
-    if (classes.size() > 0) {
+    if (classes != null && classes.length > 0) {
       final StringBuilder sb = new StringBuilder();
 
       final InnerClassTemplate template = new InnerClassTemplate(baseTemplatePath, blowOnReturn);
 
-      for (final ClassWrapper inner : classes) {
-        if (inner.getExposure() == ReflectionUtils.Exposure.PUBLIC) {
-          sb.append(template.build(inner));
-          sb.append('\n');
-        }
+      for (final Class<?> inner : classes) {
+        System.out.println("\t\tInner Class: '" + inner.getCanonicalName() + "'");
+        sb.append(template.build(inner));
+        sb.append('\n');
       }
-      innerClasses = sb.toString();
+      retVal = sb.toString();
     } else {
-      innerClasses = null;
+      retVal = null;
     }
+
+    return retVal;
   }
 
-  private void setMethods(final String text) {
-    methods = text;
-  }
-
-  private void setPackageName(final String text) {
-    packageName = text;
+  private String getTemplate() {
+    return templateManager.getTemplate(key);
   }
 }

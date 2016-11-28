@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.containers;
+package uk.co.alt236.stubber.exporters.v1.containers;
 
 import uk.co.alt236.stubber.util.ReflectionUtils;
 import uk.co.alt236.stubber.util.ReflectionUtils.ClassType;
@@ -95,11 +95,7 @@ public class ClassWrapper implements Modifiers {
   }
 
   public boolean isInnerClass() {
-    if (isAnonymousClass()) {
-      return true;
-    } else {
-      return getCanonicalName().contains("$");
-    }
+    return isAnonymousClass() || getCanonicalName().contains("$");
   }
 
   @Override
