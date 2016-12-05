@@ -1,8 +1,9 @@
 package uk.co.alt236.stubber.exporters;
 
 
-import uk.co.alt236.stubber.exporters.template.ClassTemplate;
+import uk.co.alt236.stubber.exporters.templates.ClassTemplate;
 import uk.co.alt236.stubber.util.FileIo;
+import uk.co.alt236.stubber.util.Log;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
@@ -26,12 +27,12 @@ import java.lang.reflect.Modifier;
     final boolean isPublic = Modifier.isPublic(clazz.getModifiers());
     final boolean isAnon = clazz.isAnonymousClass();
 
-    System.out.println(
+    Log.out(
         "About to export: Public: " + isPublic + ", Anon: " + isAnon
         + " -- '" + clazz.getCanonicalName() + "'");
 
     if (!isAnon) {
-      System.out.println("\tExporting: " + clazz.getCanonicalName());
+      Log.outClass("Exporting: " + clazz.getCanonicalName());
 
       final File packagePath = new File(
           exportDirectory,

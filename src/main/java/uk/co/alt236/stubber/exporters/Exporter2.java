@@ -1,7 +1,9 @@
 package uk.co.alt236.stubber.exporters;
 
-import uk.co.alt236.stubber.exporters.template.ClassTemplate;
+import uk.co.alt236.stubber.exporters.sections.FormatterFactory;
+import uk.co.alt236.stubber.exporters.templates.TemplateFactory;
 import uk.co.alt236.stubber.util.FileIo;
+import uk.co.alt236.stubber.util.Log;
 
 import java.io.File;
 import java.util.Collection;
@@ -17,7 +19,7 @@ public class Exporter2 {
     exportDirectory = new File(exportDir);
     fileWriter = new FileWriter(
         exportDirectory,
-        new ClassTemplate(templateDirectory, blowOnException));
+        TemplateFactory.create(templateDirectory, new FormatterFactory(), blowOnException));
   }
 
   private void cleanup() {
@@ -25,7 +27,7 @@ public class Exporter2 {
       try {
         FileIo.deleteRecursively(exportDirectory);
       } catch (final Exception e) {
-        System.out.println(e.getMessage());
+        Log.err(e.getMessage());
       }
     }
     exportDirectory.mkdirs();
@@ -44,6 +46,6 @@ public class Exporter2 {
         count++;
       }
     }
-    System.out.println("Files Written: " + count);
+    Log.out("Files Written: " + count);
   }
 }

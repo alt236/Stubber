@@ -1,13 +1,15 @@
-package uk.co.alt236.stubber.exporters.template;
+package uk.co.alt236.stubber.exporters.templates;
 
-import uk.co.alt236.stubber.exporters.template.sections.ClassFormatter;
-import uk.co.alt236.stubber.exporters.template.sections.ConstructorFormatter;
-import uk.co.alt236.stubber.exporters.template.sections.FieldFormatter;
-import uk.co.alt236.stubber.exporters.template.sections.MethodFormatter;
+import uk.co.alt236.stubber.exporters.CommonFilter;
+import uk.co.alt236.stubber.exporters.sections.FormatterFactory;
+import uk.co.alt236.stubber.util.Log;
 
-abstract class AbstractClassTemplate {
+import java.util.List;
+
+public abstract class ClassTemplate {
 
   private static final String TAB = "\t";
+  private static final String NO_ENUMS = TAB + "// NO ENUMS DECLARED";
   private static final String NO_PACKAGE_NAME = TAB + "// NO PACKAGE_NAME!";
   private static final String NO_FIELDS = TAB + "// NO VISIBLE FIELDS!";
   private static final String NO_CLASS_DEFINITION = TAB + "// NO CLASS DEFINITION!";
@@ -16,32 +18,28 @@ abstract class AbstractClassTemplate {
   private static final String NO_CONSTRUCTORS = TAB + "// NO VISIBLE CONSTRUCTORS!";
 
   private final TemplateManager templateManager;
+  private final boolean blowOnReturn;
   private final String baseTemplatePath;
   private final String key;
-  private final boolean blowOnReturn;
+  private final FormatterFactory formatterFactory;
 
-  private final ClassFormatter classFormatter;
-  private final ConstructorFormatter constructorFormatter;
-  private final FieldFormatter fieldFormatter;
-  private final MethodFormatter methodFormatter;
   private String packageName;
   private String classDefinition;
   private String constructors;
   private String fields;
   private String methods;
   private String innerClasses;
+  private List<String> enums;
 
-  protected AbstractClassTemplate(final String baseTemplatePath,
-                                  final String template,
-                                  final boolean blowOnReturn) {
+  protected ClassTemplate(final String baseTemplatePath,
+                          final String template,
+                          final FormatterFactory formatterFactory,
+                          final boolean blowOnReturn) {
 
     this.templateManager = new TemplateManager(baseTemplatePath);
-    this.classFormatter = new ClassFormatter();
-    this.constructorFormatter = new ConstructorFormatter();
-    this.fieldFormatter = new FieldFormatter();
-    this.methodFormatter = new MethodFormatter(blowOnReturn);
     this.baseTemplatePath = baseTemplatePath;
     this.blowOnReturn = blowOnReturn;
+    this.formatterFactory = formatterFactory;
     this.key = template;
   }
 
@@ -59,10 +57,22 @@ abstract class AbstractClassTemplate {
 
   public String build(final Class<?> clazz) {
     packageName = clazz.getPackage().getName();
-    classDefinition = classFormatter.getClassDefinition(clazz);
-    constructors = constructorFormatter.getConstructors(clazz);
-    fields = fieldFormatter.getFieldDefinition(clazz);
-    methods = methodFormatter.getMethods(clazz);
+    classDefinition = formatterFactory
+        .getFormatter(clazz)
+        .format(clazz);
+    constructors = formatterFactory
+        .getConstructorFormatter()
+        .format(clazz.getDeclaredConstructors());
+    fields = formatterFactory
+        .getFieldFormatter(clazz)
+        .format(clazz.getDeclaredFields());
+    methods = formatterFactory
+        .getMethodFormatter(clazz, blowOnReturn)
+        .format(clazz.getDeclaredMethods());
+
+    enums = formatterFactory.getEnumFormatter(clazz)
+        .getEnums(clazz.getEnumConstants());
+
     innerClasses = getInnerClasses(clazz.getDeclaredClasses());
 
     return build();
@@ -73,13 +83,19 @@ abstract class AbstractClassTemplate {
 
     data = apply(data,
                  TemplateConstants.REP_TOKEN_PACKAGE,
-                 packageName + ";",
+                 "package " + packageName + ";",
                  NO_PACKAGE_NAME);
 
     data = apply(data,
                  TemplateConstants.REP_TOKEN_CLASS_DEFINITION,
                  classDefinition,
                  NO_CLASS_DEFINITION);
+
+    final String enumString = formatEnums(enums);
+    data = apply(data,
+                 TemplateConstants.REP_TOKEN_ENUMS,
+                 enumString,
+                 NO_ENUMS);
 
     data = apply(data,
                  TemplateConstants.REP_TOKEN_CONSTRUCTORS,
@@ -104,16 +120,40 @@ abstract class AbstractClassTemplate {
     return data;
   }
 
-  public String getInnerClasses(final Class<?>[] classes) {
+  private String formatEnums(final List<String> enums) {
+    final String retVal;
+
+    if (enums == null || enums.isEmpty()) {
+      retVal = "";
+    } else {
+      final StringBuilder sb = new StringBuilder();
+
+      for (final String anEnum : enums) {
+        if (sb.length() > 0) {
+          sb.append(",\n");
+        }
+
+        sb.append(anEnum);
+      }
+
+      sb.append(";");
+      retVal = sb.toString();
+    }
+
+    return retVal;
+  }
+
+  private String getInnerClasses(final Class[] classes) {
     final String retVal;
 
     if (classes != null && classes.length > 0) {
       final StringBuilder sb = new StringBuilder();
 
-      final InnerClassTemplate template = new InnerClassTemplate(baseTemplatePath, blowOnReturn);
+      final InnerClassTemplate template
+          = new InnerClassTemplate(baseTemplatePath, formatterFactory, blowOnReturn);
 
-      for (final Class<?> inner : classes) {
-        System.out.println("\t\tInner Class: '" + inner.getCanonicalName() + "'");
+      for (final Class inner : CommonFilter.filter(classes)) {
+        Log.outInnerClass("\t\tInner Class: '" + inner.getCanonicalName() + "'");
         sb.append(template.build(inner));
         sb.append('\n');
       }

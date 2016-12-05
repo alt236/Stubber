@@ -2,15 +2,17 @@ package uk.co.alt236.stubber;
 
 import uk.co.alt236.stubber.exporters.Exporter2;
 import uk.co.alt236.stubber.jar.parser.JarClassParser;
+import uk.co.alt236.stubber.util.Log;
 import uk.co.alt236.stubber.util.StubberClassLoader;
 import uk.co.alt236.stubber.util.validators.FileValidator;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class Stubber {
+/*package*/ final class Stubber {
 
   private final String mAdditionalClasspath;
   private final String mTargetJarPath;
@@ -36,29 +38,41 @@ public final class Stubber {
     this.jarClassParser = new JarClassParser(classLoader, mTargetJarPath);
   }
 
+  private Collection<Class<?>> filter(final Collection<Class<?>> classes) {
+    final Collection<Class<?>> retVal = new ArrayList<>();
+
+    for (final Class<?> clazz : classes) {
+      if (!Modifier.isStatic(clazz.getModifiers())) {
+        retVal.add(clazz);
+      }
+    }
+
+    return retVal;
+  }
+
   public void listJarContents() {
     final Collection<Class<?>> classSet = jarClassParser.getClasses();
     for (final Class<?> clazz : classSet) {
-      System.out.println("Class: " + clazz);
+      Log.out("Class: " + clazz);
       final Method[] methods = clazz.getDeclaredMethods();
 
       for (final Method method : methods) {
-        System.out.println("\t" + method);
+        Log.out("\t" + method);
       }
     }
   }
 
   public void stubIt() {
     final Collection<Class<?>> classes = jarClassParser.getClasses();
-
+    final Collection<Class<?>> filteredClasses = filter(classes);
     final Exporter2 exporter2 = new Exporter2(
         outputDir,
         mTemplatePath,
         blowOnReturn);
 
-    exporter2.export(classes);
+    exporter2.export(filteredClasses);
 
-    System.out.println("  ----   DONE  -----");
+    Log.out("  ----   DONE  -----");
   }
 
   private void validate() {
