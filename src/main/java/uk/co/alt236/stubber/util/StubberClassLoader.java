@@ -26,14 +26,14 @@ public class StubberClassLoader extends URLClassLoader {
                     for (final File file : listOfFiles) {
                         if (file.isFile()) {
                             if (isJarFile(file)) {
-                                System.out.println("File " + file.getName());
+                                Log.out("File " + file.getName());
                                 listOfJars.add(getUrl(file));
                             }
             }
                     }
                 } else {
                     if (isJarFile(f)) {
-                        System.out.println("File " + f.getName());
+                        Log.out("File " + f.getName());
                         listOfJars.add(getUrl(f));
                     }
         }

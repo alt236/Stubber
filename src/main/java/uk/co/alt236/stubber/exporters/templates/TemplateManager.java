@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters.template;
+package uk.co.alt236.stubber.exporters.templates;
 
 import uk.co.alt236.stubber.util.FileIo;
 

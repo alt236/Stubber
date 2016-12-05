@@ -1,19 +1,28 @@
-package uk.co.alt236.stubber.exporters.template.sections;
+package uk.co.alt236.stubber.exporters.sections;
 
-import uk.co.alt236.stubber.util.ReflectionUtils;
+import uk.co.alt236.stubber.exporters.CommonFilter;
+import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ConstructorFormatter {
+/*package*/ class ConstructorFormatter implements Formatter<Constructor[]> {
 
-  public String getConstructors(final Class<?> clazz) {
+  private List<Constructor> filter(final Constructor[] constructors) {
+    final List<Constructor> retVal = new ArrayList<>();
+
+    retVal.addAll(CommonFilter.filter(constructors));
+    return retVal;
+  }
+
+  public String format(final Constructor[] constructors) {
     final StringBuilder sb = new StringBuilder();
 
     boolean wroteSomething = false;
-    for (final Constructor<?> constructor : clazz.getConstructors()) {
+    for (final Constructor<?> constructor : filter(constructors)) {
       final List<String> modifiers =
-          ModifierFormatter.getModifiers(constructor.getModifiers());
+          ModifierFormatter.getModifiers(constructor);
       wroteSomething = true;
 
       sb.append('\t');
@@ -22,7 +31,7 @@ public class ConstructorFormatter {
         sb.append(' ');
       }
 
-      sb.append(constructor.getName());
+      sb.append(constructor.getDeclaringClass().getSimpleName());
 
       sb.append('(');
 
@@ -51,4 +60,5 @@ public class ConstructorFormatter {
     }
     return sb.toString();
   }
+
 }
