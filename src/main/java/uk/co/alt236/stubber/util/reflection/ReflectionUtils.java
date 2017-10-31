@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 public final class ReflectionUtils {
 
@@ -103,7 +105,16 @@ public final class ReflectionUtils {
   }
 
   public static String getSaneType(final Field field) {
-    return getSaneType(field.getType());
+    final Type type = field.getGenericType();
+
+    final String retVal;
+    if (type instanceof ParameterizedType) {
+      final ParameterizedType ptype = (ParameterizedType) type;
+      retVal = ptype.getTypeName();
+    } else {
+      retVal = type.getTypeName();
+    }
+    return retVal.replaceAll("\\$", "\\.");
   }
 
   public enum ClassType {

@@ -43,7 +43,12 @@ import java.util.Locale;
     final int thisClassModifiers = clazz.getModifiers();
 
     if (clazz.isInterface()) {
-      retVal = getModifiers(thisClassModifiers & ALLOWED_INTERFACE_MODS);
+      final int bitmask = clearBits(
+          ALLOWED_INTERFACE_MODS,
+          Modifier.FINAL,
+          Modifier.ABSTRACT,
+          Modifier.STATIC);
+      retVal = getModifiers(thisClassModifiers & bitmask);
     } else if (clazz.isEnum()) {
       final int bitmask = clearBits(
           ALLOWED_CLASS_MODS,
