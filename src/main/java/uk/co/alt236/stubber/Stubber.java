@@ -2,6 +2,7 @@ package uk.co.alt236.stubber;
 
 import uk.co.alt236.stubber.exporters.Exporter2;
 import uk.co.alt236.stubber.jar.parser.JarClassParser;
+import uk.co.alt236.stubber.resources.Templates;
 import uk.co.alt236.stubber.util.Log;
 import uk.co.alt236.stubber.util.StubberClassLoader;
 import uk.co.alt236.stubber.util.validators.FileValidator;
@@ -20,6 +21,7 @@ import java.util.List;
   private final String outputDir;
   private final boolean blowOnReturn;
   private final JarClassParser jarClassParser;
+  private final Templates templates;
 
   private Stubber(final Builder builder) {
     mTemplatePath = builder.templateDir;
@@ -27,6 +29,7 @@ import java.util.List;
     mTargetJarPath = builder.targetJar;
     outputDir = builder.outputDir;
     blowOnReturn = builder.blowOnReturn;
+    templates = new Templates();
 
     validate();
 
@@ -67,7 +70,7 @@ import java.util.List;
     final Collection<Class<?>> filteredClasses = filter(classes);
     final Exporter2 exporter2 = new Exporter2(
         outputDir,
-        mTemplatePath,
+        templates,
         blowOnReturn);
 
     exporter2.export(filteredClasses);
@@ -77,7 +80,6 @@ import java.util.List;
 
   private void validate() {
     final List<FileValidator> validators = new ArrayList<>();
-    validators.add(new FileValidator("Template directory", mTemplatePath));
     validators.add(new FileValidator("Target Jar", mTargetJarPath));
     validators.add(new FileValidator("Output directory", outputDir));
     validators.add(new FileValidator("Dependencies path", mAdditionalClasspath, true));

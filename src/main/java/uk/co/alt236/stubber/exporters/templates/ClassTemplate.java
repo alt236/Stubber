@@ -19,8 +19,6 @@ public abstract class ClassTemplate {
 
   private final TemplateManager templateManager;
   private final boolean blowOnReturn;
-  private final String baseTemplatePath;
-  private final String key;
   private final FormatterFactory formatterFactory;
 
   private String packageName;
@@ -31,16 +29,13 @@ public abstract class ClassTemplate {
   private String innerClasses;
   private List<String> enums;
 
-  protected ClassTemplate(final String baseTemplatePath,
-                          final String template,
+  protected ClassTemplate(final TemplateManager templates,
                           final FormatterFactory formatterFactory,
                           final boolean blowOnReturn) {
 
-    this.templateManager = new TemplateManager(baseTemplatePath);
-    this.baseTemplatePath = baseTemplatePath;
+    this.templateManager = templates;
     this.blowOnReturn = blowOnReturn;
     this.formatterFactory = formatterFactory;
-    this.key = template;
   }
 
   private static String apply(final String original,
@@ -79,7 +74,7 @@ public abstract class ClassTemplate {
   }
 
   private String build() {
-    String data = getTemplate();
+    String data = templateManager.getClassTemplate();
 
     data = apply(data,
                  TemplateConstants.REP_TOKEN_PACKAGE,
@@ -149,8 +144,7 @@ public abstract class ClassTemplate {
     if (classes != null && classes.length > 0) {
       final StringBuilder sb = new StringBuilder();
 
-      final InnerClassTemplate template
-          = new InnerClassTemplate(baseTemplatePath, formatterFactory, blowOnReturn);
+      final InnerClassTemplate template = new InnerClassTemplate(templateManager, formatterFactory, blowOnReturn);
 
       for (final Class inner : CommonFilter.filter(classes)) {
         Log.outInnerClass("\t\tInner Class: '" + inner.getCanonicalName() + "'");
@@ -163,9 +157,5 @@ public abstract class ClassTemplate {
     }
 
     return retVal;
-  }
-
-  private String getTemplate() {
-    return templateManager.getTemplate(key);
   }
 }

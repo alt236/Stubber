@@ -2,6 +2,7 @@ package uk.co.alt236.stubber.exporters;
 
 import uk.co.alt236.stubber.exporters.sections.FormatterFactory;
 import uk.co.alt236.stubber.exporters.templates.TemplateFactory;
+import uk.co.alt236.stubber.resources.Templates;
 import uk.co.alt236.stubber.util.FileIo;
 import uk.co.alt236.stubber.util.Log;
 
@@ -14,12 +15,12 @@ public class Exporter2 {
   private final FileWriter fileWriter;
 
   public Exporter2(final String exportDir,
-                   final String templateDirectory,
+                   final Templates templates,
                    final boolean blowOnException) {
     exportDirectory = new File(exportDir);
     fileWriter = new FileWriter(
         exportDirectory,
-        TemplateFactory.create(templateDirectory, new FormatterFactory(), blowOnException));
+        TemplateFactory.create(templates, new FormatterFactory(), blowOnException));
   }
 
   private void cleanup() {
