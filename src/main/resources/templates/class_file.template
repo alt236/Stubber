@@ -1,0 +1,19 @@
+[PACKAGE]
+
+[CLASS_DEFINITION]{
+	/* ############ ENUMS ############ */
+[ENUMS]
+
+	/* ############ FIELDS ############ */
+[FIELDS]
+
+	/* ############ CONSTRUCTORS ############ */
+[CONSTRUCTORS]
+
+	/* ############ METHODS ############ */
+[METHODS]
+
+	/* ############ INNER CLASSES ############ */
+[INNER_CLASSES]
+
+}
