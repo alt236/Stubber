@@ -13,7 +13,10 @@ import java.util.Locale;
 /*package*/ final class ModifierFormatter {
 
   private static final int ALLOWED_CLASS_MODS = Modifier.classModifiers();
-  private static final int ALLOWED_INTERFACE_MODS = Modifier.interfaceModifiers();
+  // Interfaces are technically abstract, but it is not syntactically valid
+  private static final int
+      ALLOWED_INTERFACE_MODS =
+      Modifier.interfaceModifiers() & ~Modifier.ABSTRACT;
 
   private static final String STATIC = "static";
   private static final String FINAL = "final";
