@@ -1,7 +1,6 @@
 package uk.co.alt236.stubber.exporters.sections;
 
 import uk.co.alt236.stubber.exporters.CommonFilter;
-import uk.co.alt236.stubber.util.reflection.DefaultReturnValues;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
@@ -11,38 +10,17 @@ import java.util.List;
 /*package*/ class ConstructorFormatter implements Formatter<Constructor[]> {
 
   private static final String INDENT = "\t";
+  private final SuperConstructorCallWriter superConstructorCallWriter;
+
+  public ConstructorFormatter() {
+    superConstructorCallWriter = new SuperConstructorCallWriter(INDENT);
+  }
 
   private List<Constructor> filter(final Constructor[] constructors) {
     final List<Constructor> retVal = new ArrayList<>();
 
     retVal.addAll(CommonFilter.filter(constructors));
     return retVal;
-  }
-
-  private void appendSuperConstructorCall(final StringBuilder sb, final Class clazz) {
-    final Class superClass = clazz.getSuperclass();
-
-    if (requiresSuperCall(clazz)) {
-      final Constructor[] superConstructors = superClass.getDeclaredConstructors();
-      final Constructor superConstructor = superConstructors[0];
-      sb.append("\n");
-      sb.append(INDENT);
-      sb.append(INDENT);
-      sb.append("super(");
-
-      int count = 0;
-      for (int i = 0; i < superConstructor.getParameterTypes().length; i++) {
-        if (count > 0) {
-          sb.append(",");
-        }
-        sb.append(DefaultReturnValues.forClass(superConstructor.getParameterTypes()[i]));
-        count++;
-      }
-
-      sb.append(");");
-      sb.append("\n");
-      sb.append(INDENT);
-    }
   }
 
   @Override
@@ -62,22 +40,6 @@ import java.util.List;
       sb.append("\t// NO VISIBLE CONSTRUCTORS!");
     }
     return sb.toString();
-  }
-
-  private boolean requiresSuperCall(final Class clazz) {
-    final boolean retVal;
-
-    if (clazz.isEnum()) {
-      retVal = false;
-    } else {
-      final Class superClass = clazz.getSuperclass();
-      retVal = superClass != null
-               && superClass != java.lang.Object.class
-               && superClass.getDeclaredConstructors() != null
-               && superClass.getDeclaredConstructors().length > 0;
-    }
-
-    return retVal;
   }
 
   private boolean writeClassConstructors(final StringBuilder sb,
@@ -111,7 +73,7 @@ import java.util.List;
       }
 
       sb.append(") {");
-      appendSuperConstructorCall(sb, declaringClass);
+      superConstructorCallWriter.writeSuperConstructorCall(sb, declaringClass);
       sb.append('}');
       sb.append('\n');
       sb.append('\n');
@@ -124,14 +86,14 @@ import java.util.List;
                                                     final Class declaringClass) {
 
     boolean wroteSomething = false;
-    if (requiresSuperCall(declaringClass)) {
+    if (superConstructorCallWriter.requiresSuperCall(declaringClass)) {
       wroteSomething = true;
       sb.append(INDENT);
       sb.append("public");
       sb.append(' ');
       sb.append(declaringClass.getSimpleName());
       sb.append("() {");
-      appendSuperConstructorCall(sb, declaringClass.getSuperclass());
+      superConstructorCallWriter.writeSuperConstructorCall(sb, declaringClass.getSuperclass());
       sb.append('}');
       sb.append('\n');
       sb.append('\n');
