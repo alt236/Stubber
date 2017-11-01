@@ -1,7 +1,9 @@
 package uk.co.alt236.stubber.exporters;
 
 
-import uk.co.alt236.stubber.exporters.templates.ClassTemplate;
+import uk.co.alt236.stubber.exporters.templates.PayloadFactory;
+import uk.co.alt236.stubber.exporters.templates.TemplatePayload;
+import uk.co.alt236.stubber.exporters.templates.factory.TemplateFactory;
 import uk.co.alt236.stubber.util.FileIo;
 import uk.co.alt236.stubber.util.Log;
 
@@ -10,13 +12,16 @@ import java.lang.reflect.Modifier;
 
 /*oackage*/ class FileWriter {
 
-  private final ClassTemplate classTemplate;
+  private final PayloadFactory payloadFactory;
+  private final TemplateFactory templateFactory;
   private final File exportDirectory;
 
-  public FileWriter(final File exportDirectory,
-                    final ClassTemplate classTemplate) {
+  public FileWriter(final TemplateFactory templateFactory,
+                    final PayloadFactory payloadFactory,
+                    final File exportDirectory) {
+    this.templateFactory = templateFactory;
     this.exportDirectory = exportDirectory;
-    this.classTemplate = classTemplate;
+    this.payloadFactory = payloadFactory;
   }
 
   private static String convertPackageToPath(final String packageName) {
@@ -44,7 +49,8 @@ import java.lang.reflect.Modifier;
           packagePath,
           clazz.getSimpleName() + ".java");
 
-      final String classContent = classTemplate.build(clazz);
+      final TemplatePayload payload = payloadFactory.createPayload(clazz);
+      final String classContent = templateFactory.getOuterClassTemplate().populate(payload);
       FileIo.writeToFile(
           classFile,
           classContent,
