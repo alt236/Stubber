@@ -1,5 +1,7 @@
 package uk.co.alt236.stubber.util.reflection.otsv;
 
+import uk.co.alt236.stubber.util.reflection.ValueSanitizer;
+
 import java.lang.reflect.Field;
 
 /*package*/ class PrimitiveValue implements ValueGetter {
@@ -36,17 +38,17 @@ import java.lang.reflect.Field;
     if (clazz == int.class) {
       value = String.valueOf(object);
     } else if (clazz == double.class) {
-      value = String.valueOf(object) + "d";
+      value = String.valueOf(object);
     } else if (clazz == boolean.class) {
       value = String.valueOf(object);
     } else if (clazz == float.class) {
-      value = String.valueOf(object) + "f";
+      value = String.valueOf(object);
     } else if (clazz == short.class) {
       value = String.valueOf(object);
     } else if (clazz == byte.class) {
       value = String.valueOf(object);
     } else if (clazz == long.class) {
-      value = String.valueOf(object) + "l";
+      value = String.valueOf(object);
     } else if (clazz == char.class) {
       value = getChar(object);
     } else {
@@ -54,6 +56,7 @@ import java.lang.reflect.Field;
       value = null;
     }
 
-    return new ObjectToStringValue.Result(clazz, error, value);
+    final String suffixedValue = ValueSanitizer.sanitize(clazz, value);
+    return new ObjectToStringValue.Result(clazz, error, suffixedValue);
   }
 }

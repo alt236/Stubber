@@ -2,6 +2,7 @@ package uk.co.alt236.stubber.exporters.sections;
 
 import uk.co.alt236.stubber.exporters.CommonFilter;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
+import uk.co.alt236.stubber.util.reflection.ValueSanitizer;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -147,7 +148,9 @@ import java.util.List;
         } else {
           value = "null";
         }
-        methodResult = "return " + value + ";";
+
+        final String suffixedValue = ValueSanitizer.sanitize(fieldClass, value);
+        methodResult = "return " + suffixedValue + ";";
       }
     }
     return methodResult;
