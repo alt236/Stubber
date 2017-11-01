@@ -16,7 +16,8 @@ import java.util.List;
   }
 
   @Override
-  public String format(final Class<?> clazz) {
+  public String format(final Class declaringClass,
+                       final Class<?> clazz) {
     final ReflectionUtils.ClassType type = ReflectionUtils.getClassType(clazz);
     final Class<?> superClass = clazz.getSuperclass();
     final Class<?>[] interfaceList = clazz.getInterfaces();
