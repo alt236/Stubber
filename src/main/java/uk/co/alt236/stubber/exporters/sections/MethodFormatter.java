@@ -1,8 +1,8 @@
 package uk.co.alt236.stubber.exporters.sections;
 
 import uk.co.alt236.stubber.exporters.CommonFilter;
+import uk.co.alt236.stubber.util.reflection.DefaultReturnValues;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
-import uk.co.alt236.stubber.util.reflection.ValueSanitizer;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -21,7 +21,8 @@ import java.util.List;
   }
 
   @Override
-  public String format(final Method[] methods) {
+  public String format(final Class declaringClass,
+                       final Method[] methods) {
     final StringBuilder sb = new StringBuilder();
 
     boolean wroteSomething = false;
@@ -118,7 +119,6 @@ import java.util.List;
   }
 
   private String getMethodReturnStatement(final Class<?> fieldClass) {
-    final String value;
     final String methodResult;
 
     if (blowOnReturn) {
@@ -127,30 +127,8 @@ import java.util.List;
       if (fieldClass.equals(Void.TYPE)) {
         methodResult = "";
       } else {
-        if (fieldClass == int.class) {
-          value = "0";
-        } else if (fieldClass == double.class) {
-          value = "0.0";
-        } else if (fieldClass == boolean.class) {
-          value = "false";
-        } else if (fieldClass == float.class) {
-          value = "0.0";
-        } else if (fieldClass == String.class) {
-          value = "null";
-        } else if (fieldClass == short.class) {
-          value = "0";
-        } else if (fieldClass == byte.class) {
-          value = "0";
-        } else if (fieldClass == long.class) {
-          value = "0";
-        } else if (fieldClass == char.class) {
-          value = "0";
-        } else {
-          value = "null";
-        }
-
-        final String suffixedValue = ValueSanitizer.sanitize(fieldClass, value);
-        methodResult = "return " + suffixedValue + ";";
+        final String value = DefaultReturnValues.forClass(fieldClass);
+        methodResult = "return " + value + ";";
       }
     }
     return methodResult;

@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
   }
 
   @Override
-  public String format(final Field[] fields) {
+  public String format(final Class declaringClass,
+                       final Field[] fields) {
     final StringBuilder sb = new StringBuilder();
 
     boolean wroteSomething = false;

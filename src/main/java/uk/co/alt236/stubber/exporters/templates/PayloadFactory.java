@@ -35,19 +35,19 @@ public class PayloadFactory {
 
     classDefinition = formatterFactory
         .getFormatter(clazz)
-        .format(clazz);
+        .format(clazz, clazz);
 
     constructors = formatterFactory
         .getConstructorFormatter()
-        .format(clazz.getDeclaredConstructors());
+        .format(clazz, clazz.getDeclaredConstructors());
 
     fields = formatterFactory
         .getFieldFormatter(clazz)
-        .format(clazz.getDeclaredFields());
+        .format(clazz, clazz.getDeclaredFields());
 
     methods = formatterFactory
         .getMethodFormatter(clazz, blowOnReturn)
-        .format(clazz.getDeclaredMethods());
+        .format(clazz, clazz.getDeclaredMethods());
 
     enums = formatterFactory.getEnumFormatter(clazz)
         .getEnums(clazz.getEnumConstants());
