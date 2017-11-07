@@ -62,10 +62,10 @@ public class ObjectToStringPrimitiveValueTest {
   public void testDouble() {
     final Class<?> expectedClass = double.class;
     final String key1 = "DOUBLE_MAX";
-    final String value1 = String.valueOf(Double.MAX_VALUE) + "d";
+    final String value1 = String.valueOf(Double.MAX_VALUE) + "D";
 
     final String key2 = "DOUBLE_MIN";
-    final String value2 = String.valueOf(Double.MIN_VALUE) + "d";
+    final String value2 = String.valueOf(Double.MIN_VALUE) + "D";
 
     validate(key1, value1, expectedClass);
     validate(key2, value2, expectedClass);
@@ -75,10 +75,10 @@ public class ObjectToStringPrimitiveValueTest {
   public void testFloat() {
     final Class<?> expectedClass = float.class;
     final String key1 = "FLOAT_MAX";
-    final String value1 = String.valueOf(Float.MAX_VALUE) + "f";
+    final String value1 = String.valueOf(Float.MAX_VALUE) + "F";
 
     final String key2 = "FLOAT_MIN";
-    final String value2 = String.valueOf(Float.MIN_VALUE) + "f";
+    final String value2 = String.valueOf(Float.MIN_VALUE) + "F";
 
     validate(key1, value1, expectedClass);
     validate(key2, value2, expectedClass);
@@ -101,10 +101,10 @@ public class ObjectToStringPrimitiveValueTest {
   public void testLong() {
     final Class<?> expectedClass = long.class;
     final String key1 = "LONG_MAX";
-    final String value1 = String.valueOf(Long.MAX_VALUE) + "l";
+    final String value1 = String.valueOf(Long.MAX_VALUE) + "L";
 
     final String key2 = "LONG_MIN";
-    final String value2 = String.valueOf(Long.MIN_VALUE) + "l";
+    final String value2 = String.valueOf(Long.MIN_VALUE) + "L";
 
     validate(key1, value1, expectedClass);
     validate(key2, value2, expectedClass);
