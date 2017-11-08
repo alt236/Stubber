@@ -1,6 +1,8 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.field;
 
 import uk.co.alt236.stubber.exporters.CommonFilter;
+import uk.co.alt236.stubber.exporters.sections.Formatter;
+import uk.co.alt236.stubber.exporters.sections.modifier.ModifierFormatter;
 import uk.co.alt236.stubber.util.Log;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 import uk.co.alt236.stubber.util.reflection.otsv.ObjectToStringValue;
@@ -10,7 +12,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/*package*/ class FieldFormatter implements Formatter<Field[]> {
+public class FieldFormatter implements Formatter<Field[]> {
 
   private final ObjectToStringValue objectToStringValue;
 

@@ -1,4 +1,6 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.modifier;
+
+import org.apache.commons.lang3.ClassUtils;
 
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/*package*/ final class ModifierFormatter {
+public final class ModifierFormatter {
 
   private static final int ALLOWED_CLASS_MODS = Modifier.classModifiers();
   // Interfaces are technically abstract, but it is not syntactically valid
@@ -29,8 +31,8 @@ import java.util.Locale;
     // NOOP
   }
 
-  public static int clearBits(final int bitmask,
-                              final int... bits) {
+  private static int clearBits(final int bitmask,
+                               final int... bits) {
     int retVal = bitmask;
 
     for (final int bit : bits) {
@@ -41,28 +43,32 @@ import java.util.Locale;
   }
 
   public static List<String> getModifiers(final Class<?> clazz) {
-    final List<String> retVal;
-
     final int thisClassModifiers = clazz.getModifiers();
 
+    final int bitmask;
     if (clazz.isInterface()) {
-      final int bitmask = clearBits(
+      bitmask = clearBits(
           ALLOWED_INTERFACE_MODS,
           Modifier.FINAL,
           Modifier.ABSTRACT,
           Modifier.STATIC);
-      retVal = getModifiers(thisClassModifiers & bitmask);
     } else if (clazz.isEnum()) {
-      final int bitmask = clearBits(
+      bitmask = clearBits(
           ALLOWED_CLASS_MODS,
           Modifier.FINAL,
           Modifier.ABSTRACT,
           Modifier.STATIC);
-
-      retVal = getModifiers(thisClassModifiers & bitmask);
     } else {
       // Normal class
-      retVal = getModifiers(thisClassModifiers & ALLOWED_CLASS_MODS);
+      bitmask = ALLOWED_CLASS_MODS;
+    }
+
+    final List<String> retVal;
+    if (ClassUtils.isInnerClass(clazz)) {
+      retVal = getModifiers(thisClassModifiers & bitmask);
+    } else {
+      // Outer classes cannot be private
+      retVal = getModifiers(thisClassModifiers & clearBits(bitmask, Modifier.PRIVATE));
     }
 
     return retVal;

@@ -1,13 +1,15 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.constructor;
 
 import uk.co.alt236.stubber.exporters.CommonFilter;
+import uk.co.alt236.stubber.exporters.sections.Formatter;
+import uk.co.alt236.stubber.exporters.sections.modifier.ModifierFormatter;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-/*package*/ class ConstructorFormatter implements Formatter<Constructor[]> {
+public class ConstructorFormatter implements Formatter<Constructor[]> {
 
   private static final String INDENT = "\t";
   private final SuperConstructorCallWriter superConstructorCallWriter;

@@ -1,4 +1,4 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.annotation;
 
 import uk.co.alt236.stubber.util.Log;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-/*package*/ class AnnotationFormatter {
+public class AnnotationFormatter {
 
   private static final String[] ANNOTATION_METHOD_BLACKLIST_ARRAY = {
       "hashCode",

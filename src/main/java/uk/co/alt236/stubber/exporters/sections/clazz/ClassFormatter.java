@@ -1,11 +1,14 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.clazz;
 
+import uk.co.alt236.stubber.exporters.sections.Formatter;
+import uk.co.alt236.stubber.exporters.sections.annotation.AnnotationFormatter;
+import uk.co.alt236.stubber.exporters.sections.modifier.ModifierFormatter;
 import uk.co.alt236.stubber.util.reflection.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
 
-/*package*/ class ClassFormatter implements Formatter<Class<?>> {
+public class ClassFormatter implements Formatter<Class<?>> {
 
   private final ClassFormatterInternal classFormatter;
   private final AnnotationFormatter annotationFormatter;
@@ -33,9 +36,15 @@ import java.util.List;
     final String superClassName = getSuperClassName(superClass);
     final String interfaces = getInterfaces(interfaceList);
 
+    final boolean isInterface = type == ReflectionUtils.ClassType.INTERFACE;
     return classFormatter.getDefinition(
-        type == ReflectionUtils.ClassType.INTERFACE,
-        annotations, modifiers, classType, className, superClassName, interfaces);
+        isInterface,
+        annotations,
+        modifiers,
+        classType,
+        className,
+        superClassName,
+        interfaces);
   }
 
   private String getAnnotations(final List<String> annotationList) {

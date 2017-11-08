@@ -1,14 +1,14 @@
-package uk.co.alt236.stubber.exporters.sections;
+package uk.co.alt236.stubber.exporters.sections.clazz;
 
 /*package*/ class ClassFormatterInternal {
 
   private static final String EXTENDS_KEYWORD = "extends ";
   private static final String IMPLEMENTS_KEYWORD = "implements ";
 
-  private String appendOptionalValue(final StringBuilder sb,
-                                     final String prefix,
-                                     final String value,
-                                     final String suffix) {
+  private void appendOptionalValue(final StringBuilder sb,
+                                   final String prefix,
+                                   final String value,
+                                   final String suffix) {
 
     if (value != null && value.trim().length() > 0) {
       if (prefix != null) {
@@ -21,8 +21,6 @@ package uk.co.alt236.stubber.exporters.sections;
         sb.append(suffix);
       }
     }
-
-    return sb.toString();
   }
 
   public String getDefinition(final boolean isInterface,
