@@ -9,6 +9,7 @@ import org.apache.commons.cli.ParseException;
 import uk.co.alt236.stubber.cli.CommandHelpPrinter;
 import uk.co.alt236.stubber.cli.CommandLineOptions;
 import uk.co.alt236.stubber.cli.OptionsBuilder;
+import uk.co.alt236.stubber.compile.CompilerFacade;
 import uk.co.alt236.stubber.resources.Strings;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public final class Main {
           .build();
 
       stubber.stubIt();
+      new CompilerFacade().compile(cliOptions.getOutputDirectory());
     }
   }
 
