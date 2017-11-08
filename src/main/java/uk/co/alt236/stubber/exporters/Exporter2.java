@@ -14,9 +14,9 @@ import java.util.Collection;
 public class Exporter2 {
 
   private final File exportDirectory;
-  private final FileWriter fileWriter;
+  private final SourceFileWriter sourceFileWriter;
 
-  public Exporter2(final String exportDir,
+  public Exporter2(final File baseExportDirectory,
                    final Templates templates,
                    final boolean blowOnException) {
     final FormatterFactory formatterFactory = new FormatterFactory();
@@ -26,8 +26,11 @@ public class Exporter2 {
         payloadFactory =
         new PayloadFactory(templateFactory, formatterFactory, blowOnException);
 
-    exportDirectory = new File(exportDir);
-    fileWriter = new FileWriter(templateFactory, payloadFactory, exportDirectory);
+    exportDirectory = baseExportDirectory;
+    sourceFileWriter = new SourceFileWriter(
+        templateFactory,
+        payloadFactory,
+        ExportPathModifier.getSrcDirectory(exportDirectory));
   }
 
   private void cleanup() {
@@ -40,6 +43,8 @@ public class Exporter2 {
     }
 
     exportDirectory.mkdirs();
+    ExportPathModifier.getSrcDirectory(exportDirectory).mkdirs();
+    ExportPathModifier.getBuildDirectory(exportDirectory).mkdirs();
 
     if (!exportDirectory.isDirectory()) {
       exportDirectory.delete();
@@ -51,7 +56,7 @@ public class Exporter2 {
     cleanup();
     long count = 0;
     for (final Class<?> clazz : classes) {
-      if (fileWriter.writeToFile(clazz)) {
+      if (sourceFileWriter.writeToFile(clazz)) {
         count++;
       }
     }

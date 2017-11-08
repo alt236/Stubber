@@ -10,15 +10,15 @@ import uk.co.alt236.stubber.util.Log;
 import java.io.File;
 import java.lang.reflect.Modifier;
 
-/*oackage*/ class FileWriter {
+/*oackage*/ class SourceFileWriter {
 
   private final PayloadFactory payloadFactory;
   private final TemplateFactory templateFactory;
   private final File exportDirectory;
 
-  public FileWriter(final TemplateFactory templateFactory,
-                    final PayloadFactory payloadFactory,
-                    final File exportDirectory) {
+  public SourceFileWriter(final TemplateFactory templateFactory,
+                          final PayloadFactory payloadFactory,
+                          final File exportDirectory) {
     this.templateFactory = templateFactory;
     this.exportDirectory = exportDirectory;
     this.payloadFactory = payloadFactory;

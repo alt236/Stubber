@@ -9,6 +9,7 @@ import uk.co.alt236.stubber.util.Log;
 import uk.co.alt236.stubber.util.StubberClassLoader;
 import uk.co.alt236.stubber.util.validators.FileValidator;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ import java.util.List;
     final Collection<Class<?>> classes = jarClassParser.getClasses();
     final Collection<Class<?>> filteredClasses = filter(classes);
     final Exporter2 exporter2 = new Exporter2(
-        outputDir,
+        new File(outputDir),
         templates,
         blowOnReturn);
 

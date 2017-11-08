@@ -14,14 +14,10 @@ import java.util.stream.Collectors;
 public class CompilerFacade {
 
   private static final String JAVA_FILE_REGEX = ".*\\.java";
-  private static final List<String>
-      COMMAND =
-      Arrays.asList("javac", "-source", "8", "-Xmaxerrs", "9999");
-  private final List<String> javacCommand;
+
   private final CliExec cliExec;
 
   public CompilerFacade() {
-    this.javacCommand = COMMAND;
     this.cliExec = new CliExec();
   }
 
@@ -31,8 +27,8 @@ public class CompilerFacade {
     return result;
   }
 
-  public int compile(final String sourceDir) {
-    final Path path = Paths.get(sourceDir + File.separator);
+  public int compile(final File sourceDir, final File buildDir) {
+    final Path path = Paths.get(sourceDir.toURI());
     final List<File> javaFiles = FileFinder.findFiles(path, JAVA_FILE_REGEX);
 
     Log.out("Will compile java files in " + path);
@@ -42,11 +38,14 @@ public class CompilerFacade {
       return 1;
     } else {
       final File file = writeFilesToFile(javaFiles);
-      final String[] command = concat(javacCommand.toArray(
-          new String[javacCommand.size()]),
-                                      new String[]{"@" + file.getAbsolutePath()});
+      final JavacCommand command = new JavacCommand.Builder()
+          .withBuildPath(buildDir.getAbsolutePath())
+          .withSourceFiles("@" + file.getAbsolutePath())
+          .withMaxErrors(9999)
+          .withSourceCompatibility("8")
+          .build();
 
-      return cliExec.execute(command);
+      return cliExec.execute(command.toArgArray());
     }
   }
 

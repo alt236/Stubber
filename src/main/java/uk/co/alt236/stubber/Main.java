@@ -10,6 +10,7 @@ import uk.co.alt236.stubber.cli.CommandHelpPrinter;
 import uk.co.alt236.stubber.cli.CommandLineOptions;
 import uk.co.alt236.stubber.cli.OptionsBuilder;
 import uk.co.alt236.stubber.compile.CompilerFacade;
+import uk.co.alt236.stubber.exporters.ExportPathModifier;
 import uk.co.alt236.stubber.resources.Strings;
 
 import java.io.File;
@@ -34,7 +35,12 @@ public final class Main {
           .build();
 
       stubber.stubIt();
-      new CompilerFacade().compile(cliOptions.getOutputDirectory());
+
+      final File outputBasePath = new File(cliOptions.getOutputDirectory());
+      final File srcPath = ExportPathModifier.getSrcDirectory(outputBasePath);
+      final File buildPath = ExportPathModifier.getBuildDirectory(outputBasePath);
+
+      new CompilerFacade().compile(srcPath, buildPath);
     }
   }
 
