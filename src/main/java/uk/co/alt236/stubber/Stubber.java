@@ -1,5 +1,7 @@
 package uk.co.alt236.stubber;
 
+import org.apache.commons.lang3.ClassUtils;
+
 import uk.co.alt236.stubber.exporters.Exporter2;
 import uk.co.alt236.stubber.jar.parser.JarClassParser;
 import uk.co.alt236.stubber.resources.Templates;
@@ -45,7 +47,8 @@ import java.util.List;
     final Collection<Class<?>> retVal = new ArrayList<>();
 
     for (final Class<?> clazz : classes) {
-      if (!Modifier.isStatic(clazz.getModifiers())) {
+      if (!Modifier.isStatic(clazz.getModifiers())
+          && !ClassUtils.isInnerClass(clazz)) {
         retVal.add(clazz);
       }
     }
